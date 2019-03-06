@@ -102,6 +102,11 @@ export default [
             component: './List/TableList',
           },
           {
+            path: '/list/table-lists',
+            name: 'searchtables',
+            component: './AssetManagement/index',
+          },
+          {
             path: '/list/basic-list',
             name: 'basiclist',
             component: './List/BasicList',
