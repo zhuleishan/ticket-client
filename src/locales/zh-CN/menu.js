@@ -39,4 +39,7 @@ export default {
   'menu.account.settings': '个人设置',
   'menu.account.trigger': '触发报错',
   'menu.account.logout': '退出登录',
+  // 新
+  'menu.created': '模拟列表菜单',
+  'menu.created.messagelist': '模拟列表1',
 };

@@ -44,6 +44,19 @@ export default [
           },
         ],
       },
+      // 新
+      {
+        path: '/created',
+        name: 'created',
+        icon: 'dashboard',
+        routes: [
+          {
+            path: '/created/tlist',
+            name: 'messagelist',
+            component: './Created/Tlist',
+          },
+        ],
+      },
       // forms
       {
         path: '/form',
