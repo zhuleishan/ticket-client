@@ -18,7 +18,7 @@ import {
   // Modal,
   // message,
   // Badge,
-  // Divider,
+  Divider,
   // Steps,
   // Radio,
 } from 'antd';
@@ -45,6 +45,11 @@ class Tlist extends PureComponent {
     this.setState({
       expandForm: !expandForm,
     });
+  };
+
+  handleFormReset = () => {
+    const { form } = this.props;
+    form.resetFields();
   };
 
   renderSimpleForm() {
@@ -167,21 +172,6 @@ class Tlist extends PureComponent {
   }
 
   render() {
-    const dataSource = [
-      {
-        key: '1',
-        name: '胡彦斌',
-        age: 32,
-        address: '西湖区湖底公园1号',
-      },
-      {
-        key: '2',
-        name: '胡彦祖',
-        age: 42,
-        address: '西湖区湖底公园1号',
-      },
-    ];
-
     const columns = [
       {
         title: '姓名',
@@ -198,7 +188,41 @@ class Tlist extends PureComponent {
         dataIndex: 'address',
         key: 'address',
       },
+      {
+        title: '操作',
+        dataIndex: 'test',
+        key: 'test',
+        render: (text, record) => (
+          <span>
+            <a href="">Invite {record.name}</a>
+            <Divider type="vertical" />
+            <a href="">Delete</a>
+          </span>
+        ),
+      },
     ];
+
+    const dataSource = [
+      {
+        key: '1',
+        name: '胡彦斌',
+        age: 32,
+        address: '西湖区湖底公园1号',
+      },
+      {
+        key: '2',
+        name: '胡彦祖',
+        age: 42,
+        address: '西湖区湖底公园1号',
+      },
+      {
+        key: '3',
+        name: '胡彦祖',
+        age: 42,
+        address: '西湖区湖底公园1号',
+      },
+    ];
+
     return (
       <PageHeaderWrapper title="模拟表格名称">
         <Card bordered={false}>
