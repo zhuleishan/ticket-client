@@ -89,7 +89,7 @@ export default function request(url, option) {
   ) {
     if (!(newOptions.body instanceof FormData)) {
       newOptions.headers = {
-        Accept: 'application/json',
+        // Accept: 'application/json',
         'Content-Type': 'application/json; charset=utf-8',
         ...newOptions.headers,
       };
@@ -97,7 +97,7 @@ export default function request(url, option) {
     } else {
       // newOptions.body is FormData
       newOptions.headers = {
-        Accept: 'application/json',
+        // Accept: 'application/json',
         ...newOptions.headers,
       };
     }
