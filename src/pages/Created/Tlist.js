@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { connect } from 'dva';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
 import {
@@ -28,7 +29,15 @@ import styles from './Tlist.less';
 
 const FormItem = Form.Item;
 const { Option } = Select;
-
+/* eslint react/no-multi-comp:0 */
+const getValue = obj =>
+  Object.keys(obj)
+    .map(key => obj[key])
+    .join(',');
+@connect(({ rule, loading }) => ({
+  rule,
+  loading: loading.models.rule,
+}))
 @Form.create()
 class Tlist extends PureComponent {
   state = {
@@ -36,10 +45,58 @@ class Tlist extends PureComponent {
     // updateModalVisible: false,
     expandForm: false,
     // selectedRows: [],
-    // formValues: {},
+    formValues: {},
     // stepFormValues: {},
   };
 
+  // 钩子函数
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'rule/fetch',
+    });
+  }
+
+  // 分页
+  handlePageChange = (pagination, filtersArg, sorter) => {
+    const { dispatch } = this.props;
+    const { formValues } = this.state;
+
+    const filters = Object.keys(filtersArg).reduce((obj, key) => {
+      const newObj = { ...obj };
+      newObj[key] = getValue(filtersArg[key]);
+      return newObj;
+    }, {});
+
+    const params = {
+      currentPage: pagination.current,
+      pageSize: pagination.pageSize,
+      ...formValues,
+      ...filters,
+    };
+    if (sorter.field) {
+      params.sorter = `${sorter.field}_${sorter.order}`;
+    }
+    dispatch({
+      type: 'rule/fetch',
+      payload: params,
+    });
+  };
+
+  // 重置查询条件
+  handleFormReset = () => {
+    const { form, dispatch } = this.props;
+    form.resetFields();
+    this.setState({
+      formValues: {},
+    });
+    dispatch({
+      type: 'rule/fetch',
+      payload: {},
+    });
+  };
+
+  // 展开收起
   toggleForm = () => {
     const { expandForm } = this.state;
     this.setState({
@@ -47,19 +104,32 @@ class Tlist extends PureComponent {
     });
   };
 
-  handleFormReset = () => {
-    const { form } = this.props;
-    form.resetFields();
-  };
-
+  // 查询
   handleSearch = e => {
     e.preventDefault();
-    const { form } = this.props;
-    form.validateFields((err, values) => {
-      console.log('Received values of form: ', values);
+
+    const { dispatch, form } = this.props;
+
+    form.validateFields((err, fieldsValue) => {
+      if (err) return;
+
+      const values = {
+        ...fieldsValue,
+        updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
+      };
+
+      this.setState({
+        formValues: values,
+      });
+
+      dispatch({
+        type: 'rule/fetch',
+        payload: values,
+      });
     });
   };
 
+  // 收起状态form
   renderSimpleForm() {
     const {
       form: { getFieldDecorator },
@@ -101,6 +171,7 @@ class Tlist extends PureComponent {
     );
   }
 
+  // 展开状态form
   renderAdvancedForm() {
     const {
       form: { getFieldDecorator },
@@ -176,27 +247,38 @@ class Tlist extends PureComponent {
     );
   }
 
+  // 展开收起form函数
   renderForm() {
     const { expandForm } = this.state;
     return expandForm ? this.renderAdvancedForm() : this.renderSimpleForm();
   }
 
   render() {
+    const {
+      rule: {
+        data: { list, pagination },
+      },
+      loading,
+    } = this.props;
+    const paginationProps = {
+      ...pagination,
+    };
     const columns = [
       {
-        title: '姓名',
-        dataIndex: 'name',
-        key: 'name',
+        title: '服务调用次数',
+        dataIndex: 'callNo',
+        sorter: true,
+        render: val => `${val} 万`,
+        needTotal: true,
       },
       {
-        title: '年龄',
-        dataIndex: 'age',
-        key: 'age',
+        title: '状态',
+        dataIndex: 'status',
       },
       {
-        title: '住址',
-        dataIndex: 'address',
-        key: 'address',
+        title: '上次调度时间',
+        dataIndex: 'updatedAt',
+        sorter: true,
       },
       {
         title: '操作',
@@ -212,27 +294,6 @@ class Tlist extends PureComponent {
       },
     ];
 
-    const dataSource = [
-      {
-        key: '1',
-        name: '胡彦斌',
-        age: 32,
-        address: '西湖区湖底公园1号',
-      },
-      {
-        key: '2',
-        name: '胡彦祖',
-        age: 42,
-        address: '西湖区湖底公园1号',
-      },
-      {
-        key: '3',
-        name: '胡彦祖',
-        age: 42,
-        address: '西湖区湖底公园1号',
-      },
-    ];
-
     return (
       <PageHeaderWrapper title="模拟表格名称">
         <Card bordered={false}>
@@ -240,7 +301,19 @@ class Tlist extends PureComponent {
             <div className={styles.tableListForm}>{this.renderForm()}</div>
           </div>
           <div className={styles.standardTable}>
-            <Table dataSource={dataSource} columns={columns} />
+            <Table
+              dataSource={list}
+              loading={loading}
+              columns={columns}
+              pagination={{
+                current: paginationProps.current,
+                pageSize: paginationProps.pageSize,
+                total: paginationProps.total,
+                showQuickJumper: true,
+                showSizeChanger: true,
+              }}
+              onChange={this.handlePageChange}
+            />
           </div>
         </Card>
       </PageHeaderWrapper>
