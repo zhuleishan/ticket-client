@@ -52,6 +52,14 @@ class Tlist extends PureComponent {
     form.resetFields();
   };
 
+  handleSearch = e => {
+    e.preventDefault();
+    const { form } = this.props;
+    form.validateFields((err, values) => {
+      console.log('Received values of form: ', values);
+    });
+  };
+
   renderSimpleForm() {
     const {
       form: { getFieldDecorator },
@@ -60,18 +68,19 @@ class Tlist extends PureComponent {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="规则名称">
-              {getFieldDecorator('name')(<Input placeholder="请输入" />)}
+            <FormItem label="凭证单号">
+              {getFieldDecorator('name')(<Input placeholder="请输入凭证单号" />)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem label="使用状态">
-              {getFieldDecorator('status')(
+            <FormItem label="开立方">
+              {getFieldDecorator('status')(<Input placeholder="请输入开立方" />)}
+              {/* {getFieldDecorator('status')(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
                   <Option value="0">关闭</Option>
                   <Option value="1">运行中</Option>
                 </Select>
-              )}
+              )} */}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
@@ -100,18 +109,19 @@ class Tlist extends PureComponent {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="规则名称">
-              {getFieldDecorator('name')(<Input placeholder="请输入" />)}
+            <FormItem label="凭证单号">
+              {getFieldDecorator('name')(<Input placeholder="请输入凭证单号" />)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem label="使用状态">
-              {getFieldDecorator('status')(
+            <FormItem label="开立方">
+              {getFieldDecorator('status')(<Input placeholder="请输入开立方" />)}
+              {/* {getFieldDecorator('status')(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
                   <Option value="0">关闭</Option>
                   <Option value="1">运行中</Option>
                 </Select>
-              )}
+              )} */}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
