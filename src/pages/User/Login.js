@@ -15,6 +15,12 @@ const { Tab, UserName, Password, Mobile, Captcha, Submit } = Login;
 class LoginPage extends Component {
   state = {
     type: 'account',
+    login: {
+      userType: 0,
+      username: 13521111001,
+      password: 123123,
+      isPhoneCode: 0,
+    },
     autoLogin: true,
   };
 
@@ -39,15 +45,14 @@ class LoginPage extends Component {
       });
     });
 
-  handleSubmit = (err, values) => {
-    const { type } = this.state;
+  handleSubmit = err => {
+    const { login } = this.state;
     if (!err) {
       const { dispatch } = this.props;
       dispatch({
         type: 'login/login',
         payload: {
-          ...values,
-          type,
+          ...login,
         },
       });
     }
@@ -82,7 +87,7 @@ class LoginPage extends Component {
               !submitting &&
               this.renderMessage(formatMessage({ id: 'app.login.message-invalid-credentials' }))}
             <UserName
-              name="userName"
+              name="username"
               placeholder={`${formatMessage({ id: 'app.login.userName' })}`}
               rules={[
                 {

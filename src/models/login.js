@@ -20,7 +20,7 @@ export default {
         payload: response,
       });
       // Login successfully
-      if (response.status === 'ok') {
+      if (response.success) {
         reloadAuthorized();
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
