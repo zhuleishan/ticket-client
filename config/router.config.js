@@ -44,6 +44,19 @@ export default [
           },
         ],
       },
+      // 唐票管理
+      {
+        path: '/tangManagement',
+        name: 'tangManagement',
+        icon: 'dashboard',
+        routes: [
+          {
+            path: '/tangManagement/auditTrailRows/auditingList',
+            name: 'auditingList',
+            component: './TangManagement/AuditTrailRows/AuditingList',
+          },
+        ],
+      },
       // 新
       {
         path: '/created',
