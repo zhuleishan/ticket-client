@@ -103,7 +103,7 @@ export default function request(url, option) {
     } else {
       // newOptions.body is FormData
       newOptions.headers = {
-        Accept: 'application/json',
+        // Accept: 'application/json',
         ...newOptions.headers,
       };
     }
