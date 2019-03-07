@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { connect } from 'dva';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
 import {
@@ -28,7 +29,11 @@ import styles from './Tlist.less';
 
 const FormItem = Form.Item;
 const { Option } = Select;
-
+/* eslint react/no-multi-comp:0 */
+@connect(({ rule, loading }) => ({
+  rule,
+  loading: loading.models.rule,
+}))
 @Form.create()
 class Tlist extends PureComponent {
   state = {
@@ -39,6 +44,13 @@ class Tlist extends PureComponent {
     // formValues: {},
     // stepFormValues: {},
   };
+
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'rule/fetch',
+    });
+  }
 
   toggleForm = () => {
     const { expandForm } = this.state;
@@ -167,36 +179,37 @@ class Tlist extends PureComponent {
   }
 
   render() {
-    const dataSource = [
-      {
-        key: '1',
-        name: '胡彦斌',
-        age: 32,
-        address: '西湖区湖底公园1号',
+    const {
+      rule: {
+        data: { list },
       },
-      {
-        key: '2',
-        name: '胡彦祖',
-        age: 42,
-        address: '西湖区湖底公园1号',
-      },
-    ];
-
+      loading,
+    } = this.props;
     const columns = [
       {
-        title: '姓名',
+        title: '规则名称',
         dataIndex: 'name',
-        key: 'name',
+        render: text => <a onClick={() => this.previewItem(text)}>{text}</a>,
       },
       {
-        title: '年龄',
-        dataIndex: 'age',
-        key: 'age',
+        title: '描述',
+        dataIndex: 'desc',
       },
       {
-        title: '住址',
-        dataIndex: 'address',
-        key: 'address',
+        title: '服务调用次数',
+        dataIndex: 'callNo',
+        sorter: true,
+        render: val => `${val} 万`,
+        needTotal: true,
+      },
+      {
+        title: '状态',
+        dataIndex: 'status',
+      },
+      {
+        title: '上次调度时间',
+        dataIndex: 'updatedAt',
+        sorter: true,
       },
     ];
     return (
@@ -206,7 +219,7 @@ class Tlist extends PureComponent {
             <div className={styles.tableListForm}>{this.renderForm()}</div>
           </div>
           <div className={styles.standardTable}>
-            <Table dataSource={dataSource} columns={columns} />
+            <Table dataSource={list} loading={loading} columns={columns} />
           </div>
         </Card>
       </PageHeaderWrapper>
