@@ -55,6 +55,10 @@ export default [
             name: 'auditingList',
             component: './TangManagement/AuditTrailRows/AuditingList',
           },
+          {
+            path: '/tangManagement/auditTrailRows/auditingView',
+            component: './tangManagement/AuditTrailRows/AuditingView',
+          },
         ],
       },
       // 新
@@ -76,6 +80,12 @@ export default [
         icon: 'form',
         name: 'form',
         routes: [
+          {
+            path: '/form/advanced-form',
+            name: 'advancedform',
+            // authority: ['admin'],
+            component: './Forms/AdvancedForm',
+          },
           {
             path: '/form/basic-form',
             name: 'basicform',
@@ -107,12 +117,6 @@ export default [
                 component: './Forms/StepForm/Step3',
               },
             ],
-          },
-          {
-            path: '/form/advanced-form',
-            name: 'advancedform',
-            authority: ['admin'],
-            component: './Forms/AdvancedForm',
           },
         ],
       },
@@ -190,7 +194,7 @@ export default [
           {
             path: '/profile/advanced',
             name: 'advanced',
-            authority: ['admin'],
+            // authority: ['admin'],
             component: './Profile/AdvancedProfile',
           },
         ],
