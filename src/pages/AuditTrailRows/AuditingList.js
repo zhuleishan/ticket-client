@@ -41,7 +41,7 @@ const getValue = obj =>
   loading: loading.models.rule,
 }))
 @Form.create()
-class Tlist extends PureComponent {
+class AuditingList extends PureComponent {
   state = {
     // modalVisible: false,
     // updateModalVisible: false,
@@ -279,7 +279,7 @@ class Tlist extends PureComponent {
         key: 'test',
         render: () => (
           <span>
-            <a href="/tangManagement/auditTrailRows/auditingView">查看</a>
+            <a href="/auditTrailRows/auditingView">查看</a>
             <Divider type="vertical" />
             <a href="">审核</a>
           </span>
@@ -314,4 +314,4 @@ class Tlist extends PureComponent {
     );
   }
 }
-export default Tlist;
+export default AuditingList;

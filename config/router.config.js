@@ -46,18 +46,18 @@ export default [
       },
       // 唐票管理
       {
-        path: '/tangManagement',
-        name: 'tangManagement',
+        path: '/auditTrailRows',
+        name: 'auditTrailRows',
         icon: 'dashboard',
         routes: [
           {
-            path: '/tangManagement/auditTrailRows/auditingList',
+            path: '/auditTrailRows/auditingList',
             name: 'auditingList',
-            component: './TangManagement/AuditTrailRows/AuditingList',
+            component: './AuditTrailRows/AuditingList',
           },
           {
-            path: '/tangManagement/auditTrailRows/auditingView',
-            component: './tangManagement/AuditTrailRows/AuditingView',
+            path: '/auditTrailRows/auditingView',
+            component: './AuditTrailRows/AuditingView',
           },
         ],
       },

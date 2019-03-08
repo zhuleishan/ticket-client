@@ -43,6 +43,6 @@ export default {
   'menu.created': '模拟列表菜单',
   'menu.created.messagelist': '模拟列表1',
   // 唐票管理
-  'menu.tangManagement': '唐票管理',
-  'menu.tangManagement.auditingList': '凭证审核',
+  'menu.auditTrailRows': '唐票管理',
+  'menu.auditTrailRows.auditingList': '凭证审核',
 };
