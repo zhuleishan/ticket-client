@@ -111,7 +111,7 @@ export default [
           {
             path: '/form/advanced-form',
             name: 'advancedform',
-            authority: ['admin'],
+            // authority: ['admin'],
             component: './Forms/AdvancedForm',
           },
         ],
@@ -190,7 +190,7 @@ export default [
           {
             path: '/profile/advanced',
             name: 'advanced',
-            authority: ['admin'],
+            // authority: ['admin'],
             component: './Profile/AdvancedProfile',
           },
         ],
