@@ -5,6 +5,8 @@ import hash from 'hash.js';
 import formurlencoded from 'form-urlencoded';
 import { isAntdPro } from './utils';
 
+// const  api = process.env.NODE_ENV === `development`? `/api` : ``
+const api = ``;
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
   201: '新建或修改数据成功。',
@@ -124,7 +126,7 @@ export default function request(url, option) {
       sessionStorage.removeItem(`${hashcode}:timestamp`);
     }
   }
-  return fetch(url, newOptions)
+  return fetch(`${api}${url}`, newOptions)
     .then(checkStatus)
     .then(response => cachedSave(response, hashcode))
     .then(response => {
