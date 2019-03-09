@@ -104,7 +104,7 @@ export async function updateFakeList(params) {
 }
 
 export async function fakeAccountLogin(params) {
-  return request('/api/capital/login.do', {
+  return request('/capital/login.do', {
     method: 'POST',
     body: params,
   });

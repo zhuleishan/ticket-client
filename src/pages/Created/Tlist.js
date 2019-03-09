@@ -255,6 +255,9 @@ class Tlist extends PureComponent {
 
   render() {
     const {
+      route: { title },
+    } = this.props;
+    const {
       rule: {
         data: { list, pagination },
       },
@@ -295,7 +298,7 @@ class Tlist extends PureComponent {
     ];
 
     return (
-      <PageHeaderWrapper title="模拟表格名称">
+      <PageHeaderWrapper title={title || '模拟列表1'}>
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderForm()}</div>

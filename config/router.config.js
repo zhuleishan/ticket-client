@@ -46,19 +46,30 @@ export default [
       },
       // 唐票管理
       {
-        path: '/tangManagement',
-        name: 'tangManagement',
+        path: '/auditTrailRows',
+        name: 'auditTrailRows',
         icon: 'dashboard',
         routes: [
           {
-            path: '/tangManagement/auditTrailRows/auditingList',
+            path: '/auditTrailRows/auditingList',
             name: 'auditingList',
-            component: './TangManagement/AuditTrailRows/AuditingList',
+            component: './AuditTrailRows/AuditingList',
           },
           {
-            path: '/TangManagement/CopingManagement/CopingList',
+            path: '/auditTrailRows/auditingView',
+            component: './AuditTrailRows/AuditingView',
+          },
+        ],
+      },
+      {
+        path: '/CopingManagement',
+        name: 'CopingManagement',
+        icon: 'dashboard',
+        routes: [
+          {
+            path: '/CopingManagement/CopingList',
             name: 'CopingList',
-            component: './TangManagement/CopingManagement/CopingList',
+            component: './CopingManagement/CopingList',
           },
         ],
       },

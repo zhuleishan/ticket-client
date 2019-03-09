@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-
+import moment from 'moment';
 import {
   Row,
   Col,
@@ -41,7 +41,7 @@ const getValue = obj =>
   loading: loading.models.rule,
 }))
 @Form.create()
-class Tlist extends PureComponent {
+class AuditingList extends PureComponent {
   state = {
     // modalVisible: false,
     // updateModalVisible: false,
@@ -271,23 +271,24 @@ class Tlist extends PureComponent {
       {
         title: '上次调度时间',
         dataIndex: 'updatedAt',
+        render: val => <span>{moment(val).format('YYYY-MM-DD')}</span>,
       },
       {
         title: '操作',
         dataIndex: 'test',
         key: 'test',
-        render: (text, record) => (
+        render: () => (
           <span>
-            <a href="">Invite {record.name}</a>
+            <a href="/auditTrailRows/auditingView">查看</a>
             <Divider type="vertical" />
-            <a href="">Delete</a>
+            <a href="">审核</a>
           </span>
         ),
       },
     ];
 
     return (
-      <PageHeaderWrapper title="模拟表格名称">
+      <PageHeaderWrapper title="凭证审核">
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderForm()}</div>
@@ -313,4 +314,4 @@ class Tlist extends PureComponent {
     );
   }
 }
-export default Tlist;
+export default AuditingList;
