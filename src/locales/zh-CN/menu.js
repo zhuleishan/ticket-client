@@ -45,4 +45,5 @@ export default {
   // 唐票管理
   'menu.tangManagement': '唐票管理',
   'menu.tangManagement.auditingList': '凭证审核',
+  'menu.tangManagement.CopingList': '应付管理',
 };

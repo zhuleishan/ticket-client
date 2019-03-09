@@ -55,6 +55,11 @@ export default [
             name: 'auditingList',
             component: './TangManagement/AuditTrailRows/AuditingList',
           },
+          {
+            path: '/TangManagement/CopingManagement/CopingList',
+            name: 'CopingList',
+            component: './TangManagement/CopingManagement/CopingList',
+          },
         ],
       },
       // 新
