@@ -69,6 +69,7 @@ export default [
         routes: [
           {
             path: '/created/tlist',
+            title: '模拟表格',
             name: 'messagelist',
             component: './Created/Tlist',
           },
