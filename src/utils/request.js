@@ -5,8 +5,6 @@ import hash from 'hash.js';
 import formurlencoded from 'form-urlencoded';
 import { isAntdPro } from './utils';
 
-// const  api = process.env.NODE_ENV === `development`? `/api` : ``
-const api = ``;
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
   201: '新建或修改数据成功。',
@@ -85,6 +83,10 @@ export default function request(url, option) {
     credentials: 'include',
   };
   const newOptions = { ...defaultOptions, ...options };
+  /**
+   * 环境变量和接口判断
+   */
+  const api = process.env.NODE_ENV === `development` && newOptions.method ? `/api` : ``;
   if (
     newOptions.method === 'POST' ||
     newOptions.method === 'PUT' ||
