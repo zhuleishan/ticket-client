@@ -114,20 +114,21 @@ class AuditingList extends PureComponent {
 
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-      const rangeValue = fieldsValue['range-picker'];
       const values = {
         ...fieldsValue,
-        'date-picker': fieldsValue['date-picker'].format('YYYY-MM-DD'),
-        'range-picker': [
-          rangeValue[0].format('YYYY-MM-DD'),
-          rangeValue[1].format('YYYY-MM-DD'),
-        ].join(','),
+        startData: fieldsValue.startData ? fieldsValue.startData.format('YYYY-MM-DD') : undefined,
+        endData:
+          fieldsValue.endData && fieldsValue.endData.lenght
+            ? [
+                fieldsValue.endData[0].format('YYYY-MM-DD'),
+                fieldsValue.endData[1].format('YYYY-MM-DD'),
+              ].join(',')
+            : undefined,
         updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
       };
       this.setState({
         formValues: values,
       });
-
       dispatch({
         type: 'rule/fetch',
         payload: values,
@@ -207,7 +208,7 @@ class AuditingList extends PureComponent {
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="承诺付款日">
-              {getFieldDecorator('date-picker')(
+              {getFieldDecorator('startData')(
                 <DatePicker
                   style={{ width: '100%' }}
                   placeholder="请选择承诺付款日"
@@ -218,7 +219,7 @@ class AuditingList extends PureComponent {
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="申请时间">
-              {getFieldDecorator('range-picker')(
+              {getFieldDecorator('endData')(
                 <RangePicker style={{ width: '100%' }} format={dateFormat} />
               )}
             </FormItem>
@@ -279,7 +280,7 @@ class AuditingList extends PureComponent {
         key: 'test',
         render: () => (
           <span>
-            <a href="/auditTrailRows/auditingView">查看</a>
+            <a href="/instrumentagents/auditing-view">查看</a>
             <Divider type="vertical" />
             <a href="">审核</a>
           </span>
