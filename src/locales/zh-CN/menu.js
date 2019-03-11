@@ -47,8 +47,4 @@ export default {
   'menu.instrumentagents.auditingList': '凭证审核',
   'menu.instrumentagents.CopingManagement': '应付管理',
   'menu.instrumentagents.credentialsquery': '凭证查询',
-  'menu.instrumentagents.credentialsquerylist': '凭证查询',
-  'menu.instrumentagents.credentialsquery.index': '凭证查询',
-  'menu.instrumentagents.credentialsquery.payand': '凭证支付',
-  'menu.instrumentagents.credentialsquery.designs': '凭证支付',
 };

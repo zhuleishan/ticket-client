@@ -65,31 +65,9 @@ export default [
             component: './instrumentagents/CopingManagement/CopingList',
           },
           {
-            path: '/Instrumentagents/credentialsquery',
+            path: '/Instrumentagents/credentialsquery-list',
             name: 'credentialsquery',
             component: './Instrumentagents/CredentialsQuery',
-            hideChildrenInMenu: true,
-            routes: [
-              {
-                path: '/Instrumentagents/credentialsquery',
-                redirect: '/Instrumentagents/credentialsquery/index',
-              },
-              {
-                path: '/Instrumentagents/credentialsquery/index',
-                name: 'index',
-                component: './Instrumentagents/CredentialsQuery/Step1',
-              },
-              {
-                path: '/Instrumentagents/credentialsquery/payand',
-                name: 'payand',
-                component: './Instrumentagents/CredentialsQuery/Step2',
-              },
-              {
-                path: '/Instrumentagents/credentialsquery/designs',
-                name: 'designs',
-                component: './Instrumentagents/CredentialsQuery/Step3',
-              },
-            ],
           },
         ],
       },
