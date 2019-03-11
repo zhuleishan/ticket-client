@@ -134,3 +134,4 @@ Any type of contribution is welcome, here are some examples of how you may contr
 - Use Ant Design Pro in your daily work.
 - Submit [issues](http://github.com/ant-design/ant-design-pro/issues) to report bugs or ask questions.
 - Propose [pull requests](http://github.com/ant-design/ant-design-pro/pulls) to improve our code.
+[![唐票2.0平台](https://pqiwkp.axshare.com) 23456789
