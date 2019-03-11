@@ -51,16 +51,16 @@ export default [
         icon: 'dashboard',
         routes: [
           {
-            path: 'instrumentagents/auditing-list',
+            path: 'auditing-list',
             name: 'auditingList',
             component: './instrumentagents/AuditTrailRows/AuditingList',
           },
           {
-            path: '/instrumentagents/auditing-view',
+            path: 'auditing-view',
             component: './instrumentagents/AuditTrailRows/AuditingView',
           },
           {
-            path: '/instrumentagents/coping-management',
+            path: 'coping-management',
             name: 'CopingManagement',
             component: './instrumentagents/CopingManagement/CopingList',
           },

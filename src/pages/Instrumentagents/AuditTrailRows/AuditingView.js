@@ -1,83 +1,16 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
+import { connect } from 'dva';
 import Debounce from 'lodash-decorators/debounce';
 import Bind from 'lodash-decorators/bind';
-import { connect } from 'dva';
-import {
-  Icon,
-  Steps,
-  Card,
-  Popover,
-  Badge,
-  Tooltip,
-  // Select,
-  // Form,
-  // Col,
-  // Row,
-  // Input,
-  // DatePicker
-} from 'antd';
-import classNames from 'classnames';
-import DescriptionList from '@/components/DescriptionList';
+import { Steps, Card, Popover, Form, Col, Row, Input } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import styles from './AuditingView.less';
 
 const { Step } = Steps;
-const { Description } = DescriptionList;
-// const { RangePicker } = DatePicker;
-// const { Option } = Select;
-// const fieldLabels = {
-//   name: '仓库名',
-//   url: '仓库域名',
-//   owner: '仓库管理员',
-//   approver: '审批人',
-//   dateRange: '生效日期',
-//   type: '仓库类型',
-//   name2: '任务名',
-//   url2: '任务描述',
-//   owner2: '执行人',
-//   approver2: '责任人',
-//   dateRange2: '生效日期',
-//   type2: '任务类型',
-// };
 const getWindowWidth = () => window.innerWidth || document.documentElement.clientWidth;
-
-const desc1 = (
-  <div className={classNames(styles.textSecondary, styles.stepDescription)}>
-    <Fragment>
-      曲丽丽
-      <Icon type="dingding-o" style={{ marginLeft: 8 }} />
-    </Fragment>
-    <div>2016-12-12 12:32</div>
-  </div>
-);
-
-const desc2 = (
-  <div className={styles.stepDescription}>
-    <Fragment>
-      周毛毛
-      <Icon type="dingding-o" style={{ color: '#00A0E9', marginLeft: 8 }} />
-    </Fragment>
-    <div>
-      <a href="">催一下</a>
-    </div>
-  </div>
-);
-
-const popoverContent = (
-  <div style={{ width: 160 }}>
-    吴加号
-    <span className={styles.textSecondary} style={{ float: 'right' }}>
-      <Badge status="default" text={<span style={{ color: 'rgba(0, 0, 0, 0.45)' }}>未响应</span>} />
-    </span>
-    <div className={styles.textSecondary} style={{ marginTop: 4 }}>
-      耗时：2小时25分钟
-    </div>
-  </div>
-);
-
 const customDot = (dot, { status }) =>
   status === 'process' ? (
-    <Popover placement="topLeft" arrowPointAtCenter content={popoverContent}>
+    <Popover placement="topLeft" arrowPointAtCenter>
       {dot}
     </Popover>
   ) : (
@@ -124,10 +57,17 @@ class AuditingView extends Component {
   }
 
   render() {
-    const {
-      stepDirection,
-      // form: { getFieldDecorator },
-    } = this.props;
+    const { stepDirection } = this.state;
+    const formItemLayout = {
+      labelCol: {
+        xl: { span: 4 },
+        sm: { span: 24 },
+      },
+      wrapperCol: {
+        xl: { span: 14 },
+        md: { span: 14 },
+      },
+    };
     return (
       <PageHeaderWrapper
         title="单号：234231029431"
@@ -135,119 +75,84 @@ class AuditingView extends Component {
           <img alt="" src="https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png" />
         }
       >
-        {/* <Card title="仓库管理" className={styles.card} bordered={false}>
-          <Form layout="vertical" hideRequiredMark>
-            <Row gutter={16}>
-              <Col lg={6} md={12} sm={24}>
-                <Form.Item label={fieldLabels.name}>
-                  {getFieldDecorator('name', {
-                    rules: [{ required: true, message: '请输入仓库名称' }],
-                  })(<Input placeholder="请输入仓库名称" />)}
-                </Form.Item>
-              </Col>
-              <Col xl={{ span: 6, offset: 2 }} lg={{ span: 8 }} md={{ span: 12 }} sm={24}>
-                <Form.Item label={fieldLabels.url}>
-                  {getFieldDecorator('url', {
-                    rules: [{ required: true, message: '请选择' }],
-                  })(
-                    <Input
-                      style={{ width: '100%' }}
-                      addonBefore="http://"
-                      addonAfter=".com"
-                      placeholder="请输入"
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-              <Col xl={{ span: 8, offset: 2 }} lg={{ span: 10 }} md={{ span: 24 }} sm={24}>
-                <Form.Item label={fieldLabels.owner}>
-                  {getFieldDecorator('owner', {
-                    rules: [{ required: true, message: '请选择管理员' }],
-                  })(
-                    <Select placeholder="请选择管理员">
-                      <Option value="xiao">付晓晓</Option>
-                      <Option value="mao">周毛毛</Option>
-                    </Select>
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={16}>
-              <Col lg={6} md={12} sm={24}>
-                <Form.Item label={fieldLabels.approver}>
-                  {getFieldDecorator('approver', {
-                    rules: [{ required: true, message: '请选择审批员' }],
-                  })(
-                    <Select placeholder="请选择审批员">
-                      <Option value="xiao">付晓晓</Option>
-                      <Option value="mao">周毛毛</Option>
-                    </Select>
-                  )}
-                </Form.Item>
-              </Col>
-              <Col xl={{ span: 6, offset: 2 }} lg={{ span: 8 }} md={{ span: 12 }} sm={24}>
-                <Form.Item label={fieldLabels.dateRange}>
-                  {getFieldDecorator('dateRange', {
-                    rules: [{ required: true, message: '请选择生效日期' }],
-                  })(
-                    <RangePicker placeholder={['开始日期', '结束日期']} style={{ width: '100%' }} />
-                  )}
-                </Form.Item>
-              </Col>
-              <Col xl={{ span: 8, offset: 2 }} lg={{ span: 10 }} md={{ span: 24 }} sm={24}>
-                <Form.Item label={fieldLabels.type}>
-                  {getFieldDecorator('type', {
-                    rules: [{ required: true, message: '请选择仓库类型' }],
-                  })(
-                    <Select placeholder="请选择仓库类型">
-                      <Option value="private">私密</Option>
-                      <Option value="public">公开</Option>
-                    </Select>
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
-          </Form>
-        </Card> */}
-        <Card title="流程进度" style={{ marginBottom: 24 }} bordered={false}>
+        <Card title="开具流程" style={{ marginBottom: 24 }} bordered={false}>
           <Steps direction={stepDirection} progressDot={customDot} current={1}>
-            <Step title="创建项目" description={desc1} />
-            <Step title="部门初审" description={desc2} />
+            <Step title="创建项目" />
+            <Step title="部门初审" />
             <Step title="财务复核" />
             <Step title="完成" />
           </Steps>
         </Card>
-        <Card title="用户信息" style={{ marginBottom: 24 }} bordered={false}>
-          <DescriptionList style={{ marginBottom: 24 }}>
-            <Description term="用户姓名">付小小</Description>
-            <Description term="会员卡号">32943898021309809423</Description>
-            <Description term="身份证">3321944288191034921</Description>
-            <Description term="联系方式">18112345678</Description>
-            <Description term="联系地址">
-              曲丽丽 18100000000 浙江省杭州市西湖区黄姑山路工专路交叉路口
-            </Description>
-          </DescriptionList>
-          <DescriptionList style={{ marginBottom: 24 }} title="信息组">
-            <Description term="某某数据">725</Description>
-            <Description term="该数据更新时间">2017-08-08</Description>
-            <Description>&nbsp;</Description>
-            <Description
-              term={
-                <span>
-                  某某数据
-                  <Tooltip title="数据说明">
-                    <Icon
-                      style={{ color: 'rgba(0, 0, 0, 0.43)', marginLeft: 4 }}
-                      type="info-circle-o"
-                    />
-                  </Tooltip>
-                </span>
-              }
-            >
-              725
-            </Description>
-            <Description term="该数据更新时间">2017-08-08</Description>
-          </DescriptionList>
+        <Card title="凭证信息" className={styles.card} bordered={false}>
+          <Form {...formItemLayout}>
+            <Row gutter={16}>
+              <Col xl={12} lg={12} md={12} sm={24}>
+                <Form.Item label="开立方" className={styles.label}>
+                  <Input placeholder="请输入仓库名称" />
+                </Form.Item>
+              </Col>
+              <Col xl={12} lg={12} md={12} sm={24}>
+                <Form.Item label="接收方">
+                  <Input placeholder="请输入仓库名称" />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={16}>
+              <Col xl={12} lg={12} md={12} sm={24}>
+                <Form.Item label="对账编号">
+                  <Input placeholder="请输入仓库名称" />
+                </Form.Item>
+              </Col>
+              <Col xl={12} lg={12} md={12} sm={24}>
+                <Form.Item label="应付金额">
+                  <Input placeholder="请输入仓库名称" />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={16}>
+              <Col xl={12} lg={12} md={12} sm={24}>
+                <Form.Item label="开立金额">
+                  <Input placeholder="请输入仓库名称" />
+                </Form.Item>
+              </Col>
+              <Col xl={12} lg={12} md={12} sm={24}>
+                <Form.Item label="开立日期">
+                  <Input placeholder="请输入仓库名称" />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={16}>
+              <Col xl={12} lg={12} md={12} sm={24}>
+                <Form.Item label="承诺付款日">
+                  <Input placeholder="请输入仓库名称" />
+                </Form.Item>
+              </Col>
+              <Col xl={12} lg={12} md={12} sm={24}>
+                <Form.Item label="剩余期限">
+                  <Input placeholder="请输入仓库名称" />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={16}>
+              <Col xl={12} lg={12} md={12} sm={24}>
+                <Form.Item label="经办人">
+                  <Input placeholder="请输入仓库名称" />
+                </Form.Item>
+              </Col>
+              <Col xl={12} lg={12} md={12} sm={24}>
+                <Form.Item label="联系方式">
+                  <Input placeholder="请输入仓库名称" />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row>
+              <Col xl={24} lg={12} md={12} sm={24}>
+                <Form.Item label="经办人">
+                  <Input placeholder="请输入仓库名称" />
+                </Form.Item>
+              </Col>
+            </Row>
+          </Form>
         </Card>
       </PageHeaderWrapper>
     );
