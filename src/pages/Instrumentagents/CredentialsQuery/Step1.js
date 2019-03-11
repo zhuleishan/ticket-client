@@ -1,112 +1,184 @@
 import React, { Fragment } from 'react';
 import { connect } from 'dva';
-import { Form, Input, Button, Select, Divider } from 'antd';
-import router from 'umi/router';
+import { Form, Input, Button, Select, Row, Col, Icon, InputNumber, DatePicker, Tabs } from 'antd';
 import styles from './style.less';
 
+const FormItem = Form.Item;
 const { Option } = Select;
-
-const formItemLayout = {
-  labelCol: {
-    span: 5,
-  },
-  wrapperCol: {
-    span: 19,
-  },
-};
-
+const { TabPane } = Tabs;
 @connect(({ form }) => ({
   data: form.step,
 }))
 @Form.create()
 class Step1 extends React.PureComponent {
-  render() {
-    const { form, dispatch, data } = this.props;
-    const { getFieldDecorator, validateFields } = form;
-    const onValidateForm = () => {
-      validateFields((err, values) => {
-        if (!err) {
-          dispatch({
-            type: 'form/saveStepFormData',
-            payload: values,
-          });
-          router.push('/form/step-form/confirm');
-        }
+  state = {
+    expandForm: false,
+  };
+
+  toggleForm = () => {
+    const { expandForm } = this.state;
+    this.setState({
+      expandForm: !expandForm,
+    });
+  };
+
+  handleFormReset = () => {
+    const { form } = this.props;
+    form.resetFields();
+    this.setState({});
+  };
+
+  handleSearch = e => {
+    e.preventDefault();
+
+    const { dispatch, form } = this.props;
+
+    form.validateFields((err, fieldsValue) => {
+      if (err) return;
+      const values = {
+        ...fieldsValue,
+      };
+
+      this.setState({});
+
+      dispatch({
+        type: 'rule/fetch',
+        payload: values,
       });
-    };
+    });
+  };
+
+  callback = key => {
+    console.log(key);
+  };
+
+  renderSimpleForm() {
+    const {
+      form: { getFieldDecorator },
+    } = this.props;
+    return (
+      <Form onSubmit={this.handleSearch} layout="inline">
+        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+          <Col md={8} sm={24}>
+            <FormItem label="开立方">
+              {getFieldDecorator('name')(<Input placeholder="请输入" />)}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem label="支付方">
+              {getFieldDecorator('status')(
+                <Select placeholder="请选择" style={{ width: '100%' }}>
+                  <Option value="0">关闭</Option>
+                  <Option value="1">运行中</Option>
+                </Select>
+              )}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <span className={styles.submitButtons}>
+              <Button type="primary" htmlType="submit">
+                查询
+              </Button>
+              <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
+                重置
+              </Button>
+              <a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
+                展开 <Icon type="down" />
+              </a>
+            </span>
+          </Col>
+        </Row>
+      </Form>
+    );
+  }
+
+  renderAdvancedForm() {
+    const {
+      form: { getFieldDecorator },
+    } = this.props;
+    return (
+      <Form onSubmit={this.handleSearch} layout="inline">
+        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+          <Col md={8} sm={24}>
+            <FormItem label="开立方">
+              {getFieldDecorator('name')(<Input placeholder="请输入" />)}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem label="支付方">
+              {getFieldDecorator('status')(
+                <Select placeholder="请选择" style={{ width: '100%' }}>
+                  <Option value="0">关闭</Option>
+                  <Option value="1">运行中</Option>
+                </Select>
+              )}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem label="接收方">
+              {getFieldDecorator('number')(<InputNumber style={{ width: '100%' }} />)}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+          <Col md={8} sm={24}>
+            <FormItem label="凭证状态">
+              {getFieldDecorator('date')(
+                <DatePicker style={{ width: '100%' }} placeholder="请输入更新日期" />
+              )}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem label="承诺付款日">
+              {getFieldDecorator('status3')(
+                <Select placeholder="请选择" style={{ width: '100%' }}>
+                  <Option value="0">关闭</Option>
+                  <Option value="1">运行中</Option>
+                </Select>
+              )}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <div style={{ overflow: 'hidden' }}>
+              <div style={{ marginBottom: 24 }}>
+                <Button type="primary" htmlType="submit">
+                  查询
+                </Button>
+                <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
+                  重置
+                </Button>
+                <a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
+                  收起 <Icon type="up" />
+                </a>
+              </div>
+            </div>
+          </Col>
+        </Row>
+      </Form>
+    );
+  }
+
+  renderForm() {
+    const { expandForm } = this.state;
+    return expandForm ? this.renderAdvancedForm() : this.renderSimpleForm();
+  }
+
+  render() {
     return (
       <Fragment>
-        <Form layout="horizontal" className={styles.stepForm} hideRequiredMark>
-          <Form.Item {...formItemLayout} label="付款账户">
-            {getFieldDecorator('payAccount', {
-              initialValue: data.payAccount,
-              rules: [{ required: true, message: '请选择付款账户' }],
-            })(
-              <Select placeholder="test@example.com">
-                <Option value="ant-design@alipay.com">ant-design@alipay.com</Option>
-              </Select>
-            )}
-          </Form.Item>
-          <Form.Item {...formItemLayout} label="收款账户">
-            <Input.Group compact>
-              <Select defaultValue="alipay" style={{ width: 100 }}>
-                <Option value="alipay">支付宝</Option>
-                <Option value="bank">银行账户</Option>
-              </Select>
-              {getFieldDecorator('receiverAccount', {
-                initialValue: data.receiverAccount,
-                rules: [
-                  { required: true, message: '请输入收款人账户' },
-                  { type: 'email', message: '账户名应为邮箱格式' },
-                ],
-              })(<Input style={{ width: 'calc(100% - 100px)' }} placeholder="test@example.com" />)}
-            </Input.Group>
-          </Form.Item>
-          <Form.Item {...formItemLayout} label="收款人姓名">
-            {getFieldDecorator('receiverName', {
-              initialValue: data.receiverName,
-              rules: [{ required: true, message: '请输入收款人姓名' }],
-            })(<Input placeholder="请输入收款人姓名" />)}
-          </Form.Item>
-          <Form.Item {...formItemLayout} label="转账金额">
-            {getFieldDecorator('amount', {
-              initialValue: data.amount,
-              rules: [
-                { required: true, message: '请输入转账金额' },
-                {
-                  pattern: /^(\d+)((?:\.\d+)?)$/,
-                  message: '请输入合法金额数字',
-                },
-              ],
-            })(<Input prefix="￥" placeholder="请输入金额" />)}
-          </Form.Item>
-          <Form.Item
-            wrapperCol={{
-              xs: { span: 24, offset: 0 },
-              sm: {
-                span: formItemLayout.wrapperCol.span,
-                offset: formItemLayout.labelCol.span,
-              },
-            }}
-            label=""
-          >
-            <Button type="primary" onClick={onValidateForm}>
-              下一步
-            </Button>
-          </Form.Item>
-        </Form>
-        <Divider style={{ margin: '40px 0 24px' }} />
-        <div className={styles.desc}>
-          <h3>说明</h3>
-          <h4>转账到支付宝账户</h4>
-          <p>
-            如果需要，这里可以放一些关于产品的常见问题说明。如果需要，这里可以放一些关于产品的常见问题说明。如果需要，这里可以放一些关于产品的常见问题说明。
-          </p>
-          <h4>转账到银行卡</h4>
-          <p>
-            如果需要，这里可以放一些关于产品的常见问题说明。如果需要，这里可以放一些关于产品的常见问题说明。如果需要，这里可以放一些关于产品的常见问题说明。
-          </p>
-        </div>
+        <div className={styles.tableListForm}>{this.renderForm()}</div>
+        <Tabs defaultActiveKey="1" onChange={this.callback}>
+          <TabPane tab="全部" key="1">
+            {}
+          </TabPane>
+          <TabPane tab="我开具的" key="2">
+            {}
+          </TabPane>
+          <TabPane tab="我收到的" key="3">
+            {}
+          </TabPane>
+        </Tabs>
+        ,
       </Fragment>
     );
   }

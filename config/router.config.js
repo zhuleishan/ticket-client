@@ -76,17 +76,14 @@ export default [
               },
               {
                 path: '/Instrumentagents/credentialsquery/index',
-                name: 'index',
                 component: './Instrumentagents/CredentialsQuery/Step1',
               },
               {
                 path: '/Instrumentagents/credentialsquery/payand',
-                name: 'payand',
                 component: './Instrumentagents/CredentialsQuery/Step2',
               },
               {
                 path: '/Instrumentagents/credentialsquery/designs',
-                name: 'designs',
                 component: './Instrumentagents/CredentialsQuery/Step3',
               },
             ],
