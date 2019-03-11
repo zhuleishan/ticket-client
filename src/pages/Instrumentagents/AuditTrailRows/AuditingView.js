@@ -2,11 +2,14 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import Debounce from 'lodash-decorators/debounce';
 import Bind from 'lodash-decorators/bind';
-import { Steps, Card, Popover, Form, Col, Row, Input } from 'antd';
+import { Steps, Card, Popover, Form, Col, Row, Input, Checkbox, Button } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import styles from './AuditingView.less';
+import TradePairsTable from '@/components/TradePairsTable';
 
 const { Step } = Steps;
+const { TextArea } = Input;
+const tableData = [];
 const getWindowWidth = () => window.innerWidth || document.documentElement.clientWidth;
 const customDot = (dot, { status }) =>
   status === 'process' ? (
@@ -16,28 +19,22 @@ const customDot = (dot, { status }) =>
   ) : (
     dot
   );
-@connect(({ profile, loading }) => ({
-  profile,
-  loading: loading.effects['profile/fetchAdvanced'],
+@connect(({ rule, loading }) => ({
+  rule,
+  loading: loading.models.rule,
 }))
+@Form.create()
 class AuditingView extends Component {
   state = {
     stepDirection: 'horizontal',
   };
 
+  // 钩子函数
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'profile/fetchAdvanced',
+      type: 'rule/fetch',
     });
-
-    this.setStepDirection();
-    window.addEventListener('resize', this.setStepDirection, { passive: true });
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.setStepDirection);
-    this.setStepDirection.cancel();
   }
 
   @Bind()
@@ -58,14 +55,23 @@ class AuditingView extends Component {
 
   render() {
     const { stepDirection } = this.state;
+    const {
+      form: { getFieldDecorator },
+    } = this.props;
     const formItemLayout = {
       labelCol: {
         xl: { span: 4 },
         sm: { span: 24 },
       },
       wrapperCol: {
-        xl: { span: 14 },
-        md: { span: 14 },
+        xl: { span: 20 },
+        sm: { span: 24 },
+      },
+    };
+    const specialLayout = {
+      wrapperCol: {
+        xl: { span: 24 },
+        sm: { span: 24 },
       },
     };
     return (
@@ -87,7 +93,7 @@ class AuditingView extends Component {
           <Form {...formItemLayout}>
             <Row gutter={16}>
               <Col xl={12} lg={12} md={12} sm={24}>
-                <Form.Item label="开立方" className={styles.label}>
+                <Form.Item label="开立方">
                   <Input placeholder="请输入仓库名称" />
                 </Form.Item>
               </Col>
@@ -146,13 +152,41 @@ class AuditingView extends Component {
               </Col>
             </Row>
             <Row>
-              <Col xl={24} lg={12} md={12} sm={24}>
+              <Col xl={12} lg={12} md={12} sm={24}>
                 <Form.Item label="经办人">
-                  <Input placeholder="请输入仓库名称" />
+                  <TextArea style={{ minHeight: 32 }} placeholder="请输入仓库名称" rows={4} />
                 </Form.Item>
               </Col>
             </Row>
           </Form>
+        </Card>
+        <Card title="成员管理" bordered={false}>
+          {getFieldDecorator('members', {
+            initialValue: tableData,
+          })(<TradePairsTable title="合同信息" />)}
+          <Row>
+            <Col xl={24} lg={24} md={24} sm={24} className={styles.TextCenter}>
+              <Form.Item {...specialLayout}>
+                {getFieldDecorator('agreement', {
+                  valuePropName: 'checked',
+                })(
+                  <Checkbox>
+                    阅读并同意<a href="">《开具协议》《付款承诺函》</a>
+                  </Checkbox>
+                )}
+              </Form.Item>
+            </Col>
+            <Col xl={24} lg={24} md={24} sm={24} className={styles.TextCenter}>
+              <Form.Item {...specialLayout}>
+                <Button type="primary" htmlType="submit" size="large">
+                  取消
+                </Button>
+                <Button style={{ marginLeft: 20 }} type="primary" htmlType="submit" size="large">
+                  确认
+                </Button>
+              </Form.Item>
+            </Col>
+          </Row>
         </Card>
       </PageHeaderWrapper>
     );
