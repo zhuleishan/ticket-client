@@ -61,6 +61,18 @@ export default [
           },
         ],
       },
+      {
+        path: '/CopingManagement',
+        name: 'CopingManagement',
+        icon: 'dashboard',
+        routes: [
+          {
+            path: '/CopingManagement/CopingList',
+            name: 'CopingList',
+            component: './CopingManagement/CopingList',
+          },
+        ],
+      },
       // 新
       {
         path: '/created',
@@ -69,7 +81,6 @@ export default [
         routes: [
           {
             path: '/created/tlist',
-            title: '模拟表格',
             name: 'messagelist',
             component: './Created/Tlist',
           },
@@ -81,12 +92,6 @@ export default [
         icon: 'form',
         name: 'form',
         routes: [
-          {
-            path: '/form/advanced-form',
-            name: 'advancedform',
-            // authority: ['admin'],
-            component: './Forms/AdvancedForm',
-          },
           {
             path: '/form/basic-form',
             name: 'basicform',
@@ -118,6 +123,12 @@ export default [
                 component: './Forms/StepForm/Step3',
               },
             ],
+          },
+          {
+            path: '/form/advanced-form',
+            name: 'advancedform',
+            // authority: ['admin'],
+            component: './Forms/AdvancedForm',
           },
         ],
       },
