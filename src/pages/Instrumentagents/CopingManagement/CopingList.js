@@ -124,36 +124,15 @@ class CopingList extends PureComponent {
   // 查询
   handleSearch = e => {
     e.preventDefault();
-    let values;
     const { dispatch, form } = this.props;
 
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-      console.log(fieldsValue.dateone);
-      if (fieldsValue.dateone !== undefined && fieldsValue.datetwo === undefined) {
-        values = {
-          ...fieldsValue,
-          dateone: fieldsValue.dateone.format('YYYY-MM-DD'),
-        };
-      }
-      if (fieldsValue.datetwo !== undefined && fieldsValue.dateone === undefined) {
-        values = {
-          ...fieldsValue,
-          datetwo: fieldsValue.datetwo.format('YYYY-MM-DD'),
-        };
-      }
-      if (fieldsValue.datetwo === undefined && fieldsValue.dateone === undefined) {
-        values = {
-          ...fieldsValue,
-        };
-      }
-      if (fieldsValue.dateone !== undefined && fieldsValue.datetwo !== undefined) {
-        values = {
-          ...fieldsValue,
-          dateone: fieldsValue.dateone.format('YYYY-MM-DD'),
-          datetwo: fieldsValue.datetwo.format('YYYY-MM-DD'),
-        };
-      }
+      const values = {
+        ...fieldsValue,
+        dateone: fieldsValue.dateone ? fieldsValue.dateone.format('YYYY-MM-DD') : undefined,
+        datetwo: fieldsValue.datetwo ? fieldsValue.datetwo.format('YYYY-MM-DD') : undefined,
+      };
       this.setState({
         formValues: values,
       });
