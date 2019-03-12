@@ -6,11 +6,11 @@ export default [
     routes: [
       { path: '/user', redirect: '/user/enterlogin' },
       // 默认企业登录
-      { path: '/user/enterlogin', name: 'login', component: './User/EnterLogin' },
-      { path: '/user/enterregister', name: 'register', component: './User/EnterRegister' },
+      { path: '/user/enter-login', name: 'login', component: './User/EnterLogin' },
+      { path: '/user/enter-register', name: 'register', component: './User/EnterRegister' },
       // 个人
-      { path: '/user/personallogin', name: 'login', component: './User/PersonalLogin' },
-      { path: '/user/personalregister', name: 'register', component: './User/PersonalRegister' },
+      { path: '/user/personal-login', name: 'login', component: './User/PersonalLogin' },
+      { path: '/user/personal-register', name: 'register', component: './User/PersonalRegister' },
       {
         path: '/user/register-result',
         name: 'register.result',
@@ -158,7 +158,7 @@ export default [
           {
             path: '/form/advanced-form',
             name: 'advancedform',
-            // authority: ['admin'],
+            authority: ['admin'],
             component: './Forms/AdvancedForm',
           },
         ],

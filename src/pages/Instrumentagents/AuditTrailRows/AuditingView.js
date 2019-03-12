@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import Debounce from 'lodash-decorators/debounce';
+import { formatMessage } from 'umi/locale';
 import Bind from 'lodash-decorators/bind';
 import { routerRedux } from 'dva/router';
 import { Steps, Card, Popover, Form, Col, Row, Input, Checkbox, Button, Modal, Alert } from 'antd';
@@ -63,10 +64,24 @@ class AuditingView extends Component {
     }
   }
 
-  showModal = () => {
-    this.setState({
-      visible: true,
+  showModal = e => {
+    e.preventDefault();
+    const { form } = this.props;
+    form.validateFields({ force: true }, err => {
+      if (!err) {
+        this.setState({
+          visible: true,
+        });
+      }
     });
+  };
+
+  agreementCheck = (rule, value, callback) => {
+    if (!value) {
+      callback(formatMessage({ id: 'validation.agreement.required' }));
+    } else {
+      callback();
+    }
   };
 
   handleOk = e => {
@@ -216,7 +231,11 @@ class AuditingView extends Component {
             <Col xl={24} lg={24} md={24} sm={24} className={styles.TextCenter}>
               <Form.Item {...specialLayout}>
                 {getFieldDecorator('agreement', {
-                  valuePropName: 'checked',
+                  rules: [
+                    {
+                      validator: this.agreementCheck,
+                    },
+                  ],
                 })(
                   <Checkbox>
                     阅读并同意<a href="">《开具协议》《付款承诺函》</a>
@@ -246,7 +265,7 @@ class AuditingView extends Component {
           visible={visible}
           title="凭证审核信息确认"
           width={750}
-          onOk={this.handleOk}
+          onOk={this.ModalhandleOk}
           onCancel={this.handleCancel}
           footer={[
             <Button key="back" onClick={this.handleCancel}>

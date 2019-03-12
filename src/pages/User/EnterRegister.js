@@ -125,7 +125,9 @@ class EnterRegister extends Component {
 
   mobile = (rule, value, callback) => {
     const mobileTest = /^\d{11}$/;
-    if (!mobileTest.test(value)) {
+    if (!value) {
+      callback(formatMessage({ id: 'validation.phone-number.required' }));
+    } else if (!mobileTest.test(value)) {
       callback(formatMessage({ id: 'validation.phone-number.wrong-format' }));
     } else {
       this.setState({
@@ -161,6 +163,14 @@ class EnterRegister extends Component {
         }
         callback();
       }
+    }
+  };
+
+  agreementCheck = (rule, value, callback) => {
+    if (!value) {
+      callback(formatMessage({ id: 'validation.agreement.required' }));
+    } else {
+      callback();
     }
   };
 
@@ -283,10 +293,6 @@ class EnterRegister extends Component {
               {getFieldDecorator('mobile', {
                 rules: [
                   {
-                    required: true,
-                    message: formatMessage({ id: 'validation.phone-number.required' }),
-                  },
-                  {
                     validator: this.mobile,
                   },
                 ],
@@ -334,8 +340,7 @@ class EnterRegister extends Component {
             {getFieldDecorator('agreement', {
               rules: [
                 {
-                  required: true,
-                  message: formatMessage({ id: 'validation.agreement.required' }),
+                  validator: this.agreementCheck,
                 },
               ],
             })(
