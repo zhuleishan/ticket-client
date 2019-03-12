@@ -163,7 +163,7 @@ class PersonalLogin extends Component {
             <Icon type="alipay-circle" className={styles.icon} theme="outlined" />
             <Icon type="taobao-circle" className={styles.icon} theme="outlined" />
             <Icon type="weibo-circle" className={styles.icon} theme="outlined" />
-            <Link className={styles.register} to="/user/enterlogin">
+            <Link className={styles.register} to="/user/enter-login">
               <FormattedMessage id="app.login.enter-login" />
             </Link>
           </div>
