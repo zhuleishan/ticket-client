@@ -4,7 +4,7 @@ import { formatMessage, FormattedMessage } from 'umi/locale';
 import Link from 'umi/link';
 import { Checkbox, Alert, Icon } from 'antd';
 import Login from '@/components/Login';
-import styles from './Login.less';
+import styles from './EnterLogin.less';
 
 const { Tab, UserName, Password, Mobile, Captcha, Submit } = Login;
 
@@ -12,7 +12,7 @@ const { Tab, UserName, Password, Mobile, Captcha, Submit } = Login;
   login,
   submitting: loading.effects['login/login'],
 }))
-class LoginPage extends Component {
+class EnterLogin extends Component {
   state = {
     type: 'account',
     login: {
@@ -163,8 +163,8 @@ class LoginPage extends Component {
             <Icon type="alipay-circle" className={styles.icon} theme="outlined" />
             <Icon type="taobao-circle" className={styles.icon} theme="outlined" />
             <Icon type="weibo-circle" className={styles.icon} theme="outlined" />
-            <Link className={styles.register} to="/user/register">
-              <FormattedMessage id="app.login.signup" />
+            <Link className={styles.register} to="/user/personallogin">
+              <FormattedMessage id="app.login.personal-login" />
             </Link>
           </div>
         </Login>
@@ -173,4 +173,4 @@ class LoginPage extends Component {
   }
 }
 
-export default LoginPage;
+export default EnterLogin;
