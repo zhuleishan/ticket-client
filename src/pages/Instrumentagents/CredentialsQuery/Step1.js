@@ -1,6 +1,18 @@
 import React, { Fragment } from 'react';
 import { connect } from 'dva';
-import { Form, Input, Button, Select, Row, Col, Icon, InputNumber, DatePicker, Tabs } from 'antd';
+import {
+  Form,
+  Input,
+  Button,
+  Select,
+  Row,
+  Col,
+  Icon,
+  InputNumber,
+  DatePicker,
+  Tabs,
+  Badge,
+} from 'antd';
 import styles from './style.less';
 
 const FormItem = Form.Item;
@@ -166,19 +178,13 @@ class Step1 extends React.PureComponent {
   render() {
     return (
       <Fragment>
-        <div className={styles.tableListForm}>{this.renderForm()}</div>
+        <Col className={styles.tableListForm}>{this.renderForm()}</Col>
         <Tabs defaultActiveKey="1" onChange={this.callback}>
-          <TabPane tab="全部" key="1">
-            {}
-          </TabPane>
-          <TabPane tab="我开具的" key="2">
-            {}
-          </TabPane>
-          <TabPane tab="我收到的" key="3">
-            {}
-          </TabPane>
+          <TabPane tab="全部" key="1" />
+          <TabPane tab={<Badge count={8}> 我的开具&nbsp;&nbsp;&nbsp;</Badge>} key="2" />
+          <TabPane tab={<Badge count={69}> 我的开具&nbsp;&nbsp;&nbsp;</Badge>} key="3" />
         </Tabs>
-        ,
+        <Col>{321321}</Col>
       </Fragment>
     );
   }
