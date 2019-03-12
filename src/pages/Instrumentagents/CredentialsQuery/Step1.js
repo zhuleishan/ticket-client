@@ -12,9 +12,12 @@ import {
   DatePicker,
   Tabs,
   Badge,
+  Card,
+  List,
 } from 'antd';
 import styles from './style.less';
 
+const data = ['Racing car sprays burning fuel into crowd.'];
 const FormItem = Form.Item;
 const { Option } = Select;
 const { TabPane } = Tabs;
@@ -63,6 +66,80 @@ class Step1 extends React.PureComponent {
   callback = key => {
     console.log(key);
   };
+
+  // eslint-disable-next-line class-methods-use-this
+  renderSimpleForms() {
+    return (
+      <Row>
+        <List
+          dataSource={data}
+          renderItem={item => (
+            <List.Item key={item.id}>
+              <Card
+                style={{ width: '100%' }}
+                title={
+                  <Col>
+                    {' '}
+                    <Button type="primary" ghost style={{ marginRight: '10px' }}>
+                      付款承诺函
+                    </Button>
+                    <span>T2018090820</span>
+                  </Col>
+                }
+                extra={
+                  <Col>
+                    <Button type="primary" style={{ marginRight: '10px' }}>
+                      融资
+                    </Button>
+                    <Button type="primary">转让</Button>
+                  </Col>
+                }
+                cover={
+                  <Row style={{ borderBottom: '1px solid #e8e8e8', padding: '24px 32px' }}>
+                    <Col md={7} sm={24}>
+                      <div>转让方</div>
+                      <h3>青建股份有限公司</h3>
+                      <div>接收方</div>
+                      <h3>河北钢铁有限公司</h3>
+                    </Col>
+                    <Col md={7} sm={24}>
+                      <div>开立方</div>
+                      <h3>青建股份有限公司</h3>
+                    </Col>
+                    <Col md={7} sm={24}>
+                      <div>持有金额</div>
+                      <h3>青建股份有限公司</h3>
+                    </Col>
+                    <Col md={3} sm={24} style={{ textAlign: 'right' }}>
+                      详情
+                    </Col>
+                  </Row>
+                }
+              >
+                <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+                  <Col md={5} sm={24}>
+                    开证日期：2015-09-09
+                  </Col>
+                  <Col md={5} sm={24}>
+                    接收日期：2015-09-09
+                  </Col>
+                  <Col md={5} sm={24}>
+                    承诺付款日：2015-09-09
+                  </Col>
+                  <Col md={5} sm={24}>
+                    到期天数:169 天
+                  </Col>
+                  <Col md={4} sm={24} style={{ textAlign: 'right' }}>
+                    待兑付
+                  </Col>
+                </Row>
+              </Card>
+            </List.Item>
+          )}
+        />
+      </Row>
+    );
+  }
 
   renderSimpleForm() {
     const {
@@ -181,10 +258,24 @@ class Step1 extends React.PureComponent {
         <Col className={styles.tableListForm}>{this.renderForm()}</Col>
         <Tabs defaultActiveKey="1" onChange={this.callback}>
           <TabPane tab="全部" key="1" />
-          <TabPane tab={<Badge count={8}> 我的开具&nbsp;&nbsp;&nbsp;</Badge>} key="2" />
-          <TabPane tab={<Badge count={69}> 我的开具&nbsp;&nbsp;&nbsp;</Badge>} key="3" />
+          <TabPane
+            tab={
+              <Badge count={8}>
+                <Col style={{ marginRight: 8 }}>我的开具</Col>
+              </Badge>
+            }
+            key="2"
+          />
+          <TabPane
+            tab={
+              <Badge count={9}>
+                <Col style={{ marginRight: 8 }}>我收到的</Col>
+              </Badge>
+            }
+            key="3"
+          />
         </Tabs>
-        <Col>{321321}</Col>
+        <Col>{this.renderSimpleForms()}</Col>
       </Fragment>
     );
   }
