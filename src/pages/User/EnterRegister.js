@@ -3,8 +3,8 @@ import { connect } from 'dva';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import Link from 'umi/link';
 import router from 'umi/router';
-import { Form, Input, Button, Select, Row, Col, Popover, Progress } from 'antd';
-import styles from './Register.less';
+import { Form, Input, Button, Select, Row, Col, Popover, Progress, Checkbox } from 'antd';
+import styles from './EnterRegister.less';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -39,13 +39,14 @@ const passwordProgressMap = {
   submitting: loading.effects['register/submit'],
 }))
 @Form.create()
-class Register extends Component {
+class EnterRegister extends Component {
   state = {
     count: 0,
     confirmDirty: false,
     visible: false,
     help: '',
     prefix: '86',
+    codeState: true,
   };
 
   componentDidUpdate() {
@@ -67,12 +68,13 @@ class Register extends Component {
 
   onGetCaptcha = () => {
     let count = 59;
-    this.setState({ count });
+    this.setState({ count, codeState: true });
     this.interval = setInterval(() => {
       count -= 1;
       this.setState({ count });
       if (count === 0) {
         clearInterval(this.interval);
+        this.setState({ codeState: false });
       }
     }, 1000);
   };
@@ -117,6 +119,18 @@ class Register extends Component {
     if (value && value !== form.getFieldValue('password')) {
       callback(formatMessage({ id: 'validation.password.twice' }));
     } else {
+      callback();
+    }
+  };
+
+  mobile = (rule, value, callback) => {
+    const mobileTest = /^\d{11}$/;
+    if (!mobileTest.test(value)) {
+      callback(formatMessage({ id: 'validation.phone-number.wrong-format' }));
+    } else {
+      this.setState({
+        codeState: false,
+      });
       callback();
     }
   };
@@ -176,20 +190,26 @@ class Register extends Component {
   render() {
     const { form, submitting } = this.props;
     const { getFieldDecorator } = form;
-    const { count, prefix, help, visible } = this.state;
+    const { count, prefix, help, visible, codeState } = this.state;
     return (
       <div className={styles.main}>
         <h3>
-          <FormattedMessage id="app.register.register" />
+          <FormattedMessage id="app.register.enter" />
         </h3>
         <Form onSubmit={this.handleSubmit}>
           <FormItem>
-            {getFieldDecorator('mail', {
+            {getFieldDecorator('name', {
               rules: [
                 {
                   required: true,
-                  message: formatMessage({ id: 'validation.email.required' }),
+                  message: formatMessage({ id: 'validation.name.required' }),
                 },
+              ],
+            })(<Input size="large" placeholder={formatMessage({ id: 'form.name.placeholder' })} />)}
+          </FormItem>
+          <FormItem>
+            {getFieldDecorator('mail', {
+              rules: [
                 {
                   type: 'email',
                   message: formatMessage({ id: 'validation.email.wrong-format' }),
@@ -267,8 +287,7 @@ class Register extends Component {
                     message: formatMessage({ id: 'validation.phone-number.required' }),
                   },
                   {
-                    pattern: /^\d{11}$/,
-                    message: formatMessage({ id: 'validation.phone-number.wrong-format' }),
+                    validator: this.mobile,
                   },
                 ],
               })(
@@ -300,7 +319,7 @@ class Register extends Component {
               <Col span={8}>
                 <Button
                   size="large"
-                  disabled={count}
+                  disabled={codeState}
                   className={styles.getCaptcha}
                   onClick={this.onGetCaptcha}
                 >
@@ -310,6 +329,20 @@ class Register extends Component {
                 </Button>
               </Col>
             </Row>
+          </FormItem>
+          <FormItem>
+            {getFieldDecorator('agreement', {
+              rules: [
+                {
+                  required: true,
+                  message: formatMessage({ id: 'validation.agreement.required' }),
+                },
+              ],
+            })(
+              <Checkbox>
+                阅读并同意<a href="">《开具协议》《付款承诺函》</a>
+              </Checkbox>
+            )}
           </FormItem>
           <FormItem>
             <Button
@@ -331,4 +364,4 @@ class Register extends Component {
   }
 }
 
-export default Register;
+export default EnterRegister;
