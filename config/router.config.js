@@ -51,18 +51,42 @@ export default [
         icon: 'dashboard',
         routes: [
           {
-            path: 'instrumentagents/auditing-list',
+            path: 'auditing-list',
             name: 'auditingList',
             component: './instrumentagents/AuditTrailRows/AuditingList',
           },
           {
-            path: '/instrumentagents/auditing-view',
+            path: 'auditing-view',
             component: './instrumentagents/AuditTrailRows/AuditingView',
           },
           {
-            path: '/instrumentagents/coping-management',
+            path: 'coping-management',
             name: 'CopingManagement',
             component: './instrumentagents/CopingManagement/CopingList',
+          },
+          {
+            path: '/Instrumentagents/credentialsquery',
+            name: 'credentialsquery',
+            component: './Instrumentagents/CredentialsQuery',
+            hideChildrenInMenu: true,
+            routes: [
+              {
+                path: '/Instrumentagents/credentialsquery',
+                redirect: '/Instrumentagents/credentialsquery/index',
+              },
+              {
+                path: '/Instrumentagents/credentialsquery/index',
+                component: './Instrumentagents/CredentialsQuery/Step1',
+              },
+              {
+                path: '/Instrumentagents/credentialsquery/payand',
+                component: './Instrumentagents/CredentialsQuery/Step2',
+              },
+              {
+                path: '/Instrumentagents/credentialsquery/designs',
+                component: './Instrumentagents/CredentialsQuery/Step3',
+              },
+            ],
           },
         ],
       },
@@ -94,7 +118,7 @@ export default [
             path: '/form/step-form',
             name: 'stepform',
             component: './Forms/StepForm',
-            hideChildrenInMenu: true,
+            hideChildrenInMenu: false,
             routes: [
               {
                 path: '/form/step-form',

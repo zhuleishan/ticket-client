@@ -1,5 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
+import { Link } from 'dva/router'; // 1.跳转
+// import { routerRedux } from 'dva/router';  2.跳转
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import moment from 'moment';
 import {
@@ -129,6 +131,9 @@ class AuditingList extends PureComponent {
       this.setState({
         formValues: values,
       });
+
+      // dispatch(routerRedux.push('/instrumentagents/auditing-view')); 2.跳转
+
       dispatch({
         type: 'rule/fetch',
         payload: values,
@@ -280,7 +285,8 @@ class AuditingList extends PureComponent {
         key: 'test',
         render: () => (
           <span>
-            <a href="/instrumentagents/auditing-view">查看</a>
+            <Link to="/instrumentagents/auditing-view">查看</Link>
+            {/* <Link to={`/instrumentagents/auditing-view/${val}`}>查看</Link>   1.跳转   */}
             <Divider type="vertical" />
             <a href="">审核</a>
           </span>
