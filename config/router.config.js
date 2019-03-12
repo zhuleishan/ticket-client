@@ -57,7 +57,17 @@ export default [
           },
           {
             path: 'auditing-view',
+            name: 'auditingView',
+            hideInMenu: true,
             component: './instrumentagents/AuditTrailRows/AuditingView',
+          },
+          {
+            path: 'examine-success',
+            component: './instrumentagents/AuditTrailRows/ExamineSuccess',
+          },
+          {
+            path: 'examine-error',
+            component: './instrumentagents/AuditTrailRows/ExamineError',
           },
           {
             path: 'coping-management',

@@ -1,6 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import { Table, Button, Input, message, Popconfirm, Divider, Upload, Icon } from 'antd';
 import isEqual from 'lodash/isEqual';
+import ToolitpTitle from '@/components/ToolitpTitle';
 import styles from './index.less';
 
 class TradePairsTable extends PureComponent {
@@ -116,7 +117,6 @@ class TradePairsTable extends PureComponent {
       this.toggleEditable(e, key);
       const { data } = this.state;
       const { onChange } = this.props;
-      console.log(data, this.props);
       onChange(data);
       this.setState({
         loading: false,
@@ -220,7 +220,7 @@ class TradePairsTable extends PureComponent {
         },
       },
       {
-        title: '合同附件',
+        title: <ToolitpTitle text="上传附件" title="仅支持PDF!" />,
         dataIndex: 'enclosure',
         key: 'enclosure',
         width: '15%',
@@ -229,7 +229,7 @@ class TradePairsTable extends PureComponent {
             return (
               <Upload {...props}>
                 <Button>
-                  <Icon type="upload" /> Select File
+                  <Icon type="upload" /> 上传附件
                 </Button>
               </Upload>
             );
