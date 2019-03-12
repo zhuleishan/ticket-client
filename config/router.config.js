@@ -79,6 +79,12 @@ export default [
             component: './instrumentagents/CopingManagement/CopingList',
           },
           {
+            path: 'payable-issuance',
+            name: 'PayableIssuance',
+            hideInMenu: true,
+            component: './instrumentagents/CopingManagement/PayableIssuance',
+          },
+          {
             path: '/Instrumentagents/credentialsquery',
             name: 'credentialsquery',
             component: './Instrumentagents/CredentialsQuery',
