@@ -45,6 +45,7 @@ export default {
   // 唐票管理
   'menu.instrumentagents': '唐票管理',
   'menu.instrumentagents.auditingList': '凭证审核',
+  'menu.instrumentagents.auditingView': '凭证审核查看',
   'menu.instrumentagents.CopingManagement': '应付管理',
   'menu.instrumentagents.credentialsquery': '凭证查询',
   'menu.instrumentagents.credentialsquerylist': '凭证查询',
