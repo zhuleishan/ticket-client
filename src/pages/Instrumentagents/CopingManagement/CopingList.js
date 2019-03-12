@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-
+import moment from 'moment';
 import {
   Row,
   Col,
@@ -62,6 +62,11 @@ const CreateForm = Form.create()(props => {
       form.resetFields();
     });
   };
+  function disabledDate(current) {
+    // 不能选择今天和小于今天的时间
+    return current && current < moment().endOf('day');
+  }
+
   return (
     <Modal
       destroyOnClose
@@ -113,7 +118,7 @@ const CreateForm = Form.create()(props => {
         </FormItem>
         <FormItem label="应付金额" {...formLayout}>
           {getFieldDecorator('amountPayable', {
-            rules: [{ required: true, message: '请输入凭证金额' }],
+            rules: [{ required: true, message: '请输入应付金额' }],
           })(
             <InputNumber
               formatter={value => `￥ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
@@ -124,7 +129,14 @@ const CreateForm = Form.create()(props => {
         <FormItem label="承诺付款日" {...formLayout}>
           {getFieldDecorator('paymentDate', {
             rules: [{ required: true, message: '请选择承诺付款日' }],
-          })(<DatePicker placeholder="请选择" format="YYYY-MM-DD" style={{ width: '100%' }} />)}
+          })(
+            <DatePicker
+              placeholder="请选择"
+              format="YYYY-MM-DD"
+              style={{ width: '100%' }}
+              disabledDate={disabledDate}
+            />
+          )}
         </FormItem>
         <FormItem {...formLayout} label="备注">
           {getFieldDecorator('subDescription')(<TextArea rows={4} />)}
@@ -431,44 +443,42 @@ class CopingList extends PureComponent {
       handleModalVisible: this.handleModalVisible,
     };
 
+    const Info = ({ title, value, bordered }) => (
+      <div className={styles.headerInfo}>
+        <span>{title}</span>
+        <p>{value}</p>
+        {bordered && <em />}
+      </div>
+    );
+
     return (
       <PageHeaderWrapper title="应付管理">
-        <Card bordered={false} style={{ background: '#ECECEC' }} className={styles.topBox}>
-          <div>
-            <Row gutter={8}>
-              <Col span={6}>
-                <Card title="授信额度" bordered={false} className={styles.effective}>
-                  <strong>2000000元</strong>
-                  <span>有效</span>
-                </Card>
-              </Col>
-              <Col span={6}>
-                <Card title="可用额度" bordered={false}>
-                  <strong>2000000元</strong>
-                </Card>
-              </Col>
-              <Col span={6}>
-                <Card title="已用额度" bordered={false}>
-                  <strong>2000000元</strong>
-                </Card>
-              </Col>
-              <Col span={6}>
-                <Card title="冻结额度" bordered={false}>
-                  <strong>2000000元</strong>
-                </Card>
-              </Col>
-            </Row>
-          </div>
+        <Card bordered={false}>
+          <Row>
+            <Col xs={24} lg={6}>
+              <Info title="授信额度" value="2000000元" bordered />
+              {/* <span>有效</span> */}
+            </Col>
+            <Col xs={24} lg={6}>
+              <Info title="可用额度" value="32分钟" bordered />
+            </Col>
+            <Col xs={24} lg={6}>
+              <Info title="已用额度" value="24个任务" bordered />
+            </Col>
+            <Col xs={24} lg={6}>
+              <Info title="冻结额度" value="24个任务" />
+            </Col>
+          </Row>
         </Card>
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderForm()}</div>
           </div>
           <Row className={styles.importBox}>
-            <Col span={8}>
+            <Col xs={24} lg={12}>
               <strong>应付明细</strong>
             </Col>
-            <Col span={8} offset={8} style={{ textAlign: 'right' }}>
+            <Col xs={24} lg={12} style={{ textAlign: 'center', marginTop: '20px' }}>
               <Button type="primary" onClick={() => this.handleModalVisible(true)}>
                 手工录入
               </Button>

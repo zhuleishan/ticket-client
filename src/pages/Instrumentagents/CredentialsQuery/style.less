@@ -7,6 +7,7 @@
 
 .stepFormText {
   margin-bottom: 24px;
+
   :global {
     .ant-form-item-label,
     .ant-form-item-control {
@@ -24,45 +25,25 @@
 .desc {
   padding: 0 56px;
   color: @text-color-secondary;
+
   h3 {
     margin: 0 0 12px 0;
     color: @text-color-secondary;
     font-size: 16px;
     line-height: 32px;
   }
+
   h4 {
     margin: 0 0 4px 0;
     color: @text-color-secondary;
     font-size: 14px;
     line-height: 22px;
   }
+
   p {
     margin-top: 0;
     margin-bottom: 12px;
     line-height: 22px;
-  }
-}
-
-@media screen and (max-width: @screen-md) {
-  .desc {
-    padding: 0;
-  }
-}
-
-.information {
-  line-height: 22px;
-  :global {
-    .ant-row:not(:last-child) {
-      margin-bottom: 24px;
-    }
-  }
-  .label {
-    padding-right: 8px;
-    color: @heading-color;
-    text-align: right;
-    @media screen and (max-width: @screen-sm) {
-      text-align: left;
-    }
   }
 }
 
@@ -76,9 +57,11 @@
 .uppercase {
   font-size: 12px;
 }
+
 .tableList {
   .tableListOperator {
     margin-bottom: 16px;
+
     button {
       margin-right: 8px;
     }
@@ -91,23 +74,47 @@
       display: flex;
       margin-right: 0;
       margin-bottom: 24px;
+
       > .ant-form-item-label {
         width: auto;
         padding-right: 8px;
         line-height: 32px;
       }
+
       .ant-form-item-control {
         line-height: 32px;
       }
     }
+
     .ant-form-item-control-wrapper {
       flex: 1;
     }
   }
+
   .submitButtons {
     display: block;
     margin-bottom: 24px;
     white-space: nowrap;
+  }
+}
+
+.information {
+  line-height: 22px;
+
+  :global {
+    .ant-row:not(:last-child) {
+      margin-bottom: 24px;
+    }
+  }
+
+  .label {
+    padding-right: 8px;
+    color: @heading-color;
+    text-align: right;
+
+    @media screen and (max-width: @screen-sm) {
+      text-align: left;
+    }
   }
 }
 
@@ -120,5 +127,9 @@
 @media screen and (max-width: @screen-md) {
   .tableListForm :global(.ant-form-item) {
     margin-right: 8px;
+  }
+
+  .desc {
+    padding: 0;
   }
 }
