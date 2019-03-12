@@ -1,22 +1,23 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
+
 import {
   Row,
   Col,
   Card,
   Form,
   Input,
-  // Select,
+  Select,
   Icon,
   Button,
   // Dropdown,
   // Menu,
-  // InputNumber,
+  InputNumber,
   Table,
   DatePicker,
-  // Modal,
-  // message,
+  Modal,
+  message,
   // Badge,
   Divider,
   // Steps,
@@ -29,27 +30,109 @@ const FormItem = Form.Item;
 // const { Option } = Select;
 // 时间格式
 const dateFormat = 'YYYY/MM/DD';
-
-const title = () => (
-  <Row className={styles.importBox}>
-    {' '}
-    <Col span={8}>
-      <strong>应付明细</strong>
-    </Col>
-    <Col span={8} offset={8} style={{ textAlign: 'right' }}>
-      <Button type="primary">手工录入</Button>
-      <Button type="primary">批量导入</Button>
-      <Button>下载模板</Button>
-    </Col>{' '}
-  </Row>
-);
+const SelectOption = Select.Option;
+const TextArea = Input;
 
 /* eslint react/no-multi-comp:0 */
 const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
-
+const CreateForm = Form.create()(props => {
+  const { modalVisible, form, handleAdd, handleModalVisible } = props;
+  const {
+    form: { getFieldDecorator },
+  } = props;
+  const formLayout = {
+    labelCol: { span: 7 },
+    wrapperCol: { span: 13 },
+  };
+  const okHandle = e => {
+    e.preventDefault();
+    form.validateFields((err, fieldsValue) => {
+      if (err) return;
+      const values = {
+        ...fieldsValue,
+        createdAt: fieldsValue.createdAt ? fieldsValue.createdAt.format('YYYY-MM-DD') : undefined,
+        paymentDate: fieldsValue.paymentDate
+          ? fieldsValue.paymentDate.format('YYYY-MM-DD')
+          : undefined,
+      };
+      handleAdd(values);
+      form.resetFields();
+    });
+  };
+  return (
+    <Modal
+      destroyOnClose
+      title="新建规则"
+      visible={modalVisible}
+      onOk={okHandle}
+      onCancel={() => handleModalVisible()}
+    >
+      <Form className={styles.manualInput}>
+        <FormItem label="收款方" {...formLayout}>
+          {getFieldDecorator('title', {
+            rules: [{ required: true, message: '请输入收款方' }],
+          })(
+            <Select placeholder="请选择">
+              <SelectOption value="付晓晓">付晓晓</SelectOption>
+              <SelectOption value="周毛毛">周毛毛</SelectOption>
+            </Select>
+          )}
+        </FormItem>
+        <FormItem label="凭证类型" {...formLayout}>
+          {getFieldDecorator('owner', {
+            rules: [{ required: true, message: '请选择凭证类型' }],
+          })(
+            <Select placeholder="请选择">
+              <SelectOption value="付晓晓">付晓晓</SelectOption>
+              <SelectOption value="周毛毛">周毛毛</SelectOption>
+            </Select>
+          )}
+        </FormItem>
+        <FormItem label="对账编号" {...formLayout}>
+          {getFieldDecorator('numberS', {
+            rules: [{ required: true, message: '请输入对账编号' }],
+          })(<Input placeholder="请输入" />)}
+        </FormItem>
+        <FormItem label="凭证金额" {...formLayout}>
+          {getFieldDecorator('voucherAmount', {
+            rules: [{ required: true, message: '请输入凭证金额' }],
+          })(
+            <InputNumber
+              formatter={value => `￥ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+              parser={value => value.replace(/￥\s?|(,*)/g, '')}
+            />
+          )}
+        </FormItem>
+        <FormItem label="立账日期" {...formLayout}>
+          {getFieldDecorator('createdAt', {
+            rules: [{ required: true, message: '请选择立账日期' }],
+          })(<DatePicker placeholder="请选择" format="YYYY-MM-DD" style={{ width: '100%' }} />)}
+        </FormItem>
+        <FormItem label="应付金额" {...formLayout}>
+          {getFieldDecorator('amountPayable', {
+            rules: [{ required: true, message: '请输入凭证金额' }],
+          })(
+            <InputNumber
+              formatter={value => `￥ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+              parser={value => value.replace(/￥\s?|(,*)/g, '')}
+            />
+          )}
+        </FormItem>
+        <FormItem label="承诺付款日" {...formLayout}>
+          {getFieldDecorator('paymentDate', {
+            rules: [{ required: true, message: '请选择承诺付款日' }],
+          })(<DatePicker placeholder="请选择" format="YYYY-MM-DD" style={{ width: '100%' }} />)}
+        </FormItem>
+        <FormItem {...formLayout} label="备注">
+          {getFieldDecorator('subDescription')(<TextArea rows={4} />)}
+        </FormItem>
+      </Form>
+    </Modal>
+  );
+});
 @connect(({ rule, loading }) => ({
   rule,
   loading: loading.models.rule,
@@ -57,13 +140,10 @@ const getValue = obj =>
 @Form.create()
 class CopingList extends PureComponent {
   state = {
-    // modalVisible: false,
-    // updateModalVisible: false,
     expandForm: false,
-    // selectedRows: [],
     formValues: {},
-    title,
-    // stepFormValues: {},
+    visible: false,
+    done: false,
   };
 
   // 钩子函数
@@ -144,6 +224,25 @@ class CopingList extends PureComponent {
     });
   };
 
+  // 弹窗显示
+  handleModalVisible = flag => {
+    this.setState({
+      modalVisible: !!flag,
+    });
+  };
+
+  // 手动录入提交
+  handleAdd = values => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'rule/fetchquery',
+      payload: values,
+    });
+
+    message.success('添加成功');
+    this.handleModalVisible();
+  };
+
   // 收起状态form
   renderSimpleForm() {
     const {
@@ -164,7 +263,7 @@ class CopingList extends PureComponent {
           </Col>
           <Col md={8} sm={24}>
             <span className={styles.submitButtons}>
-              <Button type="primary" htmlType="submit">
+              <Button type="primary" htmlType="submit" onClick={this.handleSearch}>
                 查询
               </Button>
               <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
@@ -255,6 +354,8 @@ class CopingList extends PureComponent {
       },
       loading,
     } = this.props;
+
+    const { modalVisible } = this.state;
     const paginationProps = {
       ...pagination,
     };
@@ -325,6 +426,10 @@ class CopingList extends PureComponent {
         ),
       },
     ];
+    const parentMethods = {
+      handleAdd: this.handleAdd,
+      handleModalVisible: this.handleModalVisible,
+    };
 
     return (
       <PageHeaderWrapper title="应付管理">
@@ -359,6 +464,18 @@ class CopingList extends PureComponent {
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderForm()}</div>
           </div>
+          <Row className={styles.importBox}>
+            <Col span={8}>
+              <strong>应付明细</strong>
+            </Col>
+            <Col span={8} offset={8} style={{ textAlign: 'right' }}>
+              <Button type="primary" onClick={() => this.handleModalVisible(true)}>
+                手工录入
+              </Button>
+              <Button type="primary">批量导入</Button>
+              <Button>下载模板</Button>
+            </Col>
+          </Row>
           <div className={styles.standardTable}>
             <Table
               {...this.state}
@@ -376,6 +493,7 @@ class CopingList extends PureComponent {
             />
           </div>
         </Card>
+        <CreateForm {...parentMethods} modalVisible={modalVisible} />
       </PageHeaderWrapper>
     );
   }
