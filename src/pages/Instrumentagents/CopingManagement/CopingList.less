@@ -21,6 +21,7 @@
   }
 }
 .importBox {
+  margin-bottom: 20px;
   :global {
     strong {
       font-size: 20px;
@@ -85,5 +86,29 @@
 
   .tableAlert {
     margin-bottom: 16px;
+  }
+}
+.standardListForm {
+  :global {
+    .ant-form-item {
+      margin-bottom: 12px;
+      &:last-child {
+        margin-bottom: 32px;
+        padding-top: 4px;
+      }
+    }
+  }
+}
+.manualInput {
+  :global {
+    .ant-form-item {
+      margin-bottom: 24px;
+    }
+    .ant-form-item-with-help {
+      margin-bottom: 5px;
+    }
+    .ant-input-number {
+      width: 100%;
+    }
   }
 }
