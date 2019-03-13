@@ -14,19 +14,19 @@ export default [
         routes: [
           {
             path: '/user/enter-register',
-            redirect: '/user/enter-register/account',
+            redirect: '/user/enter-register/enter-account',
           },
           {
-            path: '/user/enter-register/account',
-            component: './User/EnterRegister/Account',
+            path: '/user/enter-register/enter-account',
+            component: './User/EnterRegister/EnterAccount',
           },
           {
-            path: '/user/enter-register/authentication',
-            component: './User/EnterRegister/Authentication',
+            path: '/user/enter-register/enter-authentication',
+            component: './User/EnterRegister/EnterAuthentication',
           },
           {
-            path: '/user/enter-register/binding',
-            component: './User/EnterRegister/Binding',
+            path: '/user/enter-register/enter-binding',
+            component: './User/EnterRegister/EnterBinding',
           },
         ],
       },
@@ -39,19 +39,19 @@ export default [
         routes: [
           {
             path: '/user/personal-register',
-            redirect: '/user/personal-register/account',
+            redirect: '/user/personal-register/personal-account',
           },
           {
-            path: '/user/personal-register/account',
-            component: './User/PersonalRegister/Account',
+            path: '/user/personal-register/personal-account',
+            component: './User/PersonalRegister/PersonalAccount',
           },
           {
-            path: '/user/personal-register/authentication',
-            component: './User/PersonalRegister/Authentication',
+            path: '/user/personal-register/personal-authentication',
+            component: './User/PersonalRegister/PersonalAuthentication',
           },
           {
-            path: '/user/personal-register/binding',
-            component: './User/PersonalRegister/Binding',
+            path: '/user/personal-register/personal-binding',
+            component: './User/PersonalRegister/PersonalBinding',
           },
         ],
       },

@@ -205,9 +205,6 @@ class Account extends React.PureComponent {
     const { count, prefix, help, visible, codeState } = this.state;
     return (
       <Fragment>
-        <h3>
-          <FormattedMessage id="app.register.enter" />
-        </h3>
         <Form onSubmit={this.handleSubmit}>
           <FormItem>
             {getFieldDecorator('name', {

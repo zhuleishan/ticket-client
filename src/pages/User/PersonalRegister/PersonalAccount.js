@@ -97,7 +97,7 @@ class Account extends React.PureComponent {
     const { form, dispatch } = this.props;
     form.validateFields({ force: true }, err => {
       if (!err) {
-        dispatch(routerRedux.push('/user/enter-register/authentication'));
+        dispatch(routerRedux.push('/user/personal-register/personal-authentication'));
         // const { prefix } = this.state;
         // dispatch({
         //   type: 'register/submit',
@@ -205,9 +205,7 @@ class Account extends React.PureComponent {
     const { count, prefix, help, visible, codeState } = this.state;
     return (
       <Fragment>
-        <h3>
-          <FormattedMessage id="app.register.enter" />
-        </h3>
+        <br />
         <Form onSubmit={this.handleSubmit}>
           <FormItem>
             {getFieldDecorator('name', {

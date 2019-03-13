@@ -95,17 +95,17 @@ class Account extends React.PureComponent {
   handleSubmit = e => {
     e.preventDefault();
     const { form, dispatch } = this.props;
-    form.validateFields({ force: true }, err => {
+    form.validateFields({ force: true }, (err, values) => {
       if (!err) {
-        dispatch(routerRedux.push('/user/enter-register/binding'));
-        // const { prefix } = this.state;
-        // dispatch({
-        //   type: 'register/submit',
-        //   payload: {
-        //     ...values,
-        //     prefix,
-        //   },
-        // });
+        dispatch(routerRedux.push('/instrumentagents/auditing-view'));
+        const { prefix } = this.state;
+        dispatch({
+          type: 'register/submit',
+          payload: {
+            ...values,
+            prefix,
+          },
+        });
       }
     });
   };
@@ -205,9 +205,7 @@ class Account extends React.PureComponent {
     const { count, prefix, help, visible, codeState } = this.state;
     return (
       <Fragment>
-        <h3>
-          <FormattedMessage id="app.register.enter" />
-        </h3>
+        <br />
         <Form onSubmit={this.handleSubmit}>
           <FormItem>
             {getFieldDecorator('name', {

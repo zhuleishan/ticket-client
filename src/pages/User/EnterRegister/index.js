@@ -11,7 +11,7 @@ export default class StepForm extends PureComponent {
       {
         title: '企业认证',
         info: (
-          <p>
+          <p style={{ fontSize: 14 }}>
             1.企业三证影印件
             <br /> 2.法人身份影印件
             <br /> 3.管理员身份影印件
@@ -29,11 +29,11 @@ export default class StepForm extends PureComponent {
     const { pathname } = location;
     const pathList = pathname.split('/');
     switch (pathList[pathList.length - 1]) {
-      case 'account':
+      case 'enter-account':
         return 0;
-      case 'authentication':
+      case 'enter-authentication':
         return 1;
-      case 'binding':
+      case 'enter-binding':
         return 2;
       default:
         return 0;
