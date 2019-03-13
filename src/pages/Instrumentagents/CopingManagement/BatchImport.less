@@ -1,0 +1,52 @@
+@import '~antd/lib/style/themes/default.less';
+
+.title {
+  margin-bottom: 16px;
+  color: @heading-color;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.card {
+  margin-bottom: 24px;
+}
+
+.ant-steps {
+  max-width: 750px;
+  margin: 16px auto;
+}
+
+.TextCenter {
+  text-align: center;
+}
+
+.uploadBox {
+  max-width: 600px;
+  margin: 150px auto;
+  .imgTb {
+    float: left;
+    width: 70px;
+    height: 80px;
+    margin-right: 10px;
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+  p {
+    margin-bottom: 0;
+  }
+  button {
+    color: #1890ff;
+    border: none;
+  }
+}
+@media screen and (max-width: @screen-xs) {
+  .uploadBox {
+    margin: 50px auto;
+    text-align: center;
+  }
+  .imgTb {
+    display: none;
+  }
+}

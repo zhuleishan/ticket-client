@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
+import { Link } from 'dva/router'; // 1.跳转
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import moment from 'moment';
 import {
@@ -482,7 +483,9 @@ class CopingList extends PureComponent {
               <Button type="primary" onClick={() => this.handleModalVisible(true)}>
                 手工录入
               </Button>
-              <Button type="primary">批量导入</Button>
+              <Link to="/instrumentagents/batch-import">
+                <Button type="primary">批量导入</Button>
+              </Link>
               <Button>下载模板</Button>
             </Col>
           </Row>
