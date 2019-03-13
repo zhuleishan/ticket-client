@@ -49,6 +49,7 @@ export default {
   'menu.instrumentagents.CopingManagement': '应付管理',
   'menu.instrumentagents.PayableIssuance': '应付开立审核',
   'menu.instrumentagents.BatchImport': '批量导入',
+  'menu.instrumentagents.ExecutableFile': '执行文件',
   'menu.instrumentagents.credentialsquery': '凭证查询',
   'menu.instrumentagents.credentialsquerylist': '凭证查询',
   'menu.instrumentagents.credentialsquery.index': '凭证查询',
