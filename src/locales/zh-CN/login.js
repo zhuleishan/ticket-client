@@ -13,6 +13,7 @@ export default {
   'app.login.signup': '注册账户',
   'app.login.login': '登录',
   'app.register.enter': '企业注册',
+  'app.register.personal': '个人注册',
   'app.register.register': '注册',
   'app.register.get-verification-code': '获取验证码',
   'app.register.sign-in': '使用已有账户登录',
