@@ -7,10 +7,54 @@ export default [
       { path: '/user', redirect: '/user/enterlogin' },
       // 默认企业登录
       { path: '/user/enter-login', name: 'login', component: './User/EnterLogin' },
-      { path: '/user/enter-register', name: 'register', component: './User/EnterRegister' },
+      {
+        path: '/user/enter-register',
+        name: 'register',
+        component: './User/EnterRegister/index',
+        routes: [
+          {
+            path: '/user/enter-register',
+            redirect: '/user/enter-register/account',
+          },
+          {
+            path: '/user/enter-register/account',
+            component: './User/EnterRegister/Account',
+          },
+          {
+            path: '/user/enter-register/authentication',
+            component: './User/EnterRegister/Authentication',
+          },
+          {
+            path: '/user/enter-register/binding',
+            component: './User/EnterRegister/Binding',
+          },
+        ],
+      },
       // 个人
       { path: '/user/personal-login', name: 'login', component: './User/PersonalLogin' },
-      { path: '/user/personal-register', name: 'register', component: './User/PersonalRegister' },
+      {
+        path: '/user/personal-register',
+        name: 'register',
+        component: './User/PersonalRegister/index',
+        routes: [
+          {
+            path: '/user/personal-register',
+            redirect: '/user/personal-register/account',
+          },
+          {
+            path: '/user/personal-register/account',
+            component: './User/PersonalRegister/Account',
+          },
+          {
+            path: '/user/personal-register/authentication',
+            component: './User/PersonalRegister/Authentication',
+          },
+          {
+            path: '/user/personal-register/binding',
+            component: './User/PersonalRegister/Binding',
+          },
+        ],
+      },
       {
         path: '/user/register-result',
         name: 'register.result',

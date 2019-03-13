@@ -214,7 +214,7 @@ class AuditingView extends Component {
                 </Form.Item>
               </Col>
             </Row>
-            <Row>
+            <Row gutter={16}>
               <Col xl={12} lg={12} md={12} sm={24}>
                 <Form.Item label="经办人">
                   <TextArea style={{ minHeight: 32 }} placeholder="请输入仓库名称" rows={4} />

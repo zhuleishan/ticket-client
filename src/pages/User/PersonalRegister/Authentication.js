@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'dva';
-import { formatMessage, FormattedMessage } from 'umi/locale';
 import Link from 'umi/link';
 import router from 'umi/router';
+import { routerRedux } from 'dva/router';
+import { formatMessage, FormattedMessage } from 'umi/locale';
 import { Form, Input, Button, Select, Row, Col, Popover, Progress, Checkbox } from 'antd';
-import styles from './EnterRegister.less';
+import styles from './index.less';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -39,7 +40,7 @@ const passwordProgressMap = {
   submitting: loading.effects['register/submit'],
 }))
 @Form.create()
-class EnterRegister extends Component {
+class Account extends React.PureComponent {
   state = {
     count: 0,
     confirmDirty: false,
@@ -94,16 +95,17 @@ class EnterRegister extends Component {
   handleSubmit = e => {
     e.preventDefault();
     const { form, dispatch } = this.props;
-    form.validateFields({ force: true }, (err, values) => {
+    form.validateFields({ force: true }, err => {
       if (!err) {
-        const { prefix } = this.state;
-        dispatch({
-          type: 'register/submit',
-          payload: {
-            ...values,
-            prefix,
-          },
-        });
+        dispatch(routerRedux.push('/user/personal-register/binding'));
+        // const { prefix } = this.state;
+        // dispatch({
+        //   type: 'register/submit',
+        //   payload: {
+        //     ...values,
+        //     prefix,
+        //   },
+        // });
       }
     });
   };
@@ -202,9 +204,9 @@ class EnterRegister extends Component {
     const { getFieldDecorator } = form;
     const { count, prefix, help, visible, codeState } = this.state;
     return (
-      <div className={styles.main}>
+      <Fragment>
         <h3>
-          <FormattedMessage id="app.register.enter" />
+          <FormattedMessage id="app.register.personal" />
         </h3>
         <Form onSubmit={this.handleSubmit}>
           <FormItem>
@@ -364,9 +366,9 @@ class EnterRegister extends Component {
             </Link>
           </FormItem>
         </Form>
-      </div>
+      </Fragment>
     );
   }
 }
 
-export default EnterRegister;
+export default Account;
