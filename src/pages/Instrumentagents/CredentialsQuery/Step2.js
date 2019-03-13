@@ -84,7 +84,7 @@ class Step2 extends Component {
     }
   };
 
-  handleOk = e => {
+  handleOk = () => {
     const { dispatch } = this.props;
     this.setState({ loading: true });
     setTimeout(() => {
@@ -93,7 +93,7 @@ class Step2 extends Component {
     }, 1000);
   };
 
-  handleCancel = e => {
+  handleCancel = () => {
     const { dispatch } = this.props;
     this.setState({
       visible: false,
@@ -321,5 +321,4 @@ class Step2 extends Component {
     );
   }
 }
-
 export default Step2;
