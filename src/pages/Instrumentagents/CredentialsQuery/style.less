@@ -76,7 +76,7 @@
       margin-bottom: 24px;
 
       > .ant-form-item-label {
-        width: auto;
+        width: 100px;
         padding-right: 8px;
         line-height: 32px;
       }
@@ -117,7 +117,13 @@
     }
   }
 }
-
+.credentialsquerylist {
+  :global {
+    .ant-list-item:last-child {
+      border-bottom: none;
+    }
+  }
+}
 @media screen and (max-width: @screen-lg) {
   .tableListForm :global(.ant-form-item) {
     margin-right: 24px;

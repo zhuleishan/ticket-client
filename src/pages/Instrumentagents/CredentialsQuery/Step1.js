@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import { connect } from 'dva';
+import numeral from 'numeral';
 import {
   Form,
   Input,
@@ -21,6 +22,11 @@ const data = ['Racing car sprays burning fuel into crowd.'];
 const FormItem = Form.Item;
 const { Option } = Select;
 const { TabPane } = Tabs;
+const paginationProps = {
+  showSizeChanger: true,
+  showQuickJumper: true,
+  ...{ current: 1, pageSize: 10, total: 46 },
+};
 @connect(({ form }) => ({
   data: form.step,
 }))
@@ -72,7 +78,11 @@ class Step1 extends React.PureComponent {
     return (
       <Row>
         <List
+          itemLayout="vertical"
+          className={styles.credentialsquerylist}
+          pagination={paginationProps}
           dataSource={data}
+          size="large"
           renderItem={item => (
             <List.Item key={item.id}>
               <Card
@@ -108,7 +118,7 @@ class Step1 extends React.PureComponent {
                     </Col>
                     <Col md={7} sm={24}>
                       <div>持有金额</div>
-                      <h3>青建股份有限公司</h3>
+                      <h1>{numeral(10003.01).format('0,0.00')}</h1>
                     </Col>
                     <Col md={3} sm={24} style={{ textAlign: 'right' }}>
                       详情
