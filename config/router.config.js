@@ -4,9 +4,13 @@ export default [
     path: '/user',
     component: '../layouts/UserLayout',
     routes: [
-      { path: '/user', redirect: '/user/login' },
-      { path: '/user/login', name: 'login', component: './User/Login' },
-      { path: '/user/register', name: 'register', component: './User/Register' },
+      { path: '/user', redirect: '/user/enterlogin' },
+      // 默认企业登录
+      { path: '/user/enter-login', name: 'login', component: './User/EnterLogin' },
+      { path: '/user/enter-register', name: 'register', component: './User/EnterRegister' },
+      // 个人
+      { path: '/user/personal-login', name: 'login', component: './User/PersonalLogin' },
+      { path: '/user/personal-register', name: 'register', component: './User/PersonalRegister' },
       {
         path: '/user/register-result',
         name: 'register.result',
@@ -73,6 +77,12 @@ export default [
             path: 'coping-management',
             name: 'CopingManagement',
             component: './instrumentagents/CopingManagement/CopingList',
+          },
+          {
+            path: 'payable-issuance',
+            name: 'PayableIssuance',
+            hideInMenu: true,
+            component: './instrumentagents/CopingManagement/PayableIssuance',
           },
           {
             path: '/Instrumentagents/credentialsquery',
@@ -154,7 +164,7 @@ export default [
           {
             path: '/form/advanced-form',
             name: 'advancedform',
-            // authority: ['admin'],
+            authority: ['admin'],
             component: './Forms/AdvancedForm',
           },
         ],

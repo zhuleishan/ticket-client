@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import Debounce from 'lodash-decorators/debounce';
-import { formatMessage } from 'umi/locale';
 import Bind from 'lodash-decorators/bind';
 import { routerRedux } from 'dva/router';
 import { Steps, Card, Popover, Form, Col, Row, Input, Checkbox, Button, Modal, Alert } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-import styles from './AuditingView.less';
+// import { numericLiteral } from '@babel/types';
+import styles from './PayableIssuance.less';
 import TradePairsTable from '@/components/TradePairsTable';
 
 const { Step } = Steps;
@@ -64,28 +64,14 @@ class AuditingView extends Component {
     }
   }
 
-  showModal = e => {
-    e.preventDefault();
-    const { form } = this.props;
-    form.validateFields({ force: true }, err => {
-      if (!err) {
-        this.setState({
-          visible: true,
-        });
-      }
+  showModal = () => {
+    this.setState({
+      visible: true,
     });
   };
 
-  agreementCheck = (rule, value, callback) => {
-    if (!value) {
-      callback(formatMessage({ id: 'validation.agreement.required' }));
-    } else {
-      callback();
-    }
-  };
-
   handleOk = e => {
-    console.log(e);
+    e.preventDefault();
     const { dispatch } = this.props;
     this.setState({ loading: true });
     setTimeout(() => {
@@ -95,7 +81,7 @@ class AuditingView extends Component {
   };
 
   handleCancel = e => {
-    console.log(e);
+    e.preventDefault();
     const { dispatch } = this.props;
     this.setState({
       visible: false,
@@ -145,47 +131,40 @@ class AuditingView extends Component {
         }
       >
         <Card title="开具流程" style={{ marginBottom: 24 }} bordered={false}>
-          <Steps direction={stepDirection} progressDot={customDot} current={1}>
-            <Step title="创建项目" />
-            <Step title="部门初审" />
-            <Step title="财务复核" />
+          <Steps direction={stepDirection} progressDot={customDot} current={0}>
+            <Step title="凭证开立" />
+            <Step title="凭证审核" />
+            <Step title="凭证签收" />
             <Step title="完成" />
           </Steps>
         </Card>
-        <Card title="凭证信息" className={styles.card} bordered={false}>
+        <Card title="我的开票额度" className={styles.card} bordered={false}>
+          <Form {...formItemLayout} className={styles.myQuota}>
+            <Row>
+              <Col xl={24} lg={24} md={24} sm={24}>
+                <Form.Item label="开立方">
+                  <Input placeholder="请输入开立方" />
+                </Form.Item>
+              </Col>
+              <Col xl={24} lg={24} md={24} sm={24}>
+                <Form.Item label="可用额度">
+                  {/* <Input placeholder="请输入仓库名称" /> */}
+                  <h1>￥1000000</h1>
+                </Form.Item>
+              </Col>
+            </Row>
+          </Form>
+        </Card>
+        <Card title="开证信息" className={styles.card} bordered={false}>
           <Form {...formItemLayout}>
             <Row gutter={16}>
               <Col xl={12} lg={12} md={12} sm={24}>
-                <Form.Item label="开立方">
-                  <Input placeholder="请输入仓库名称" />
+                <Form.Item label="收证方">
+                  <Input placeholder="请输入收证方" />
                 </Form.Item>
               </Col>
               <Col xl={12} lg={12} md={12} sm={24}>
-                <Form.Item label="接收方">
-                  <Input placeholder="请输入仓库名称" />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={16}>
-              <Col xl={12} lg={12} md={12} sm={24}>
-                <Form.Item label="对账编号">
-                  <Input placeholder="请输入仓库名称" />
-                </Form.Item>
-              </Col>
-              <Col xl={12} lg={12} md={12} sm={24}>
-                <Form.Item label="应付金额">
-                  <Input prefix="￥" placeholder="请输入仓库名称" />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={16}>
-              <Col xl={12} lg={12} md={12} sm={24}>
-                <Form.Item label="开立金额">
-                  <Input prefix="￥" placeholder="请输入仓库名称" />
-                </Form.Item>
-              </Col>
-              <Col xl={12} lg={12} md={12} sm={24}>
-                <Form.Item label="开立日期">
+                <Form.Item label="开证金额">
                   <Input placeholder="请输入仓库名称" />
                 </Form.Item>
               </Col>
@@ -197,8 +176,20 @@ class AuditingView extends Component {
                 </Form.Item>
               </Col>
               <Col xl={12} lg={12} md={12} sm={24}>
-                <Form.Item label="剩余期限">
-                  <Input suffix="天" placeholder="请输入仓库名称" />
+                <Form.Item label="到期期限">
+                  <Input prefix="￥" placeholder="请输入仓库名称" />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={16}>
+              <Col xl={12} lg={12} md={12} sm={24}>
+                <Form.Item label="立账日期">
+                  <Input prefix="￥" placeholder="请输入仓库名称" />
+                </Form.Item>
+              </Col>
+              <Col xl={12} lg={12} md={12} sm={24}>
+                <Form.Item label="对账编号">
+                  <Input placeholder="请输入仓库名称" />
                 </Form.Item>
               </Col>
             </Row>
@@ -216,14 +207,14 @@ class AuditingView extends Component {
             </Row>
             <Row>
               <Col xl={12} lg={12} md={12} sm={24}>
-                <Form.Item label="经办人">
+                <Form.Item label="备注">
                   <TextArea style={{ minHeight: 32 }} placeholder="请输入仓库名称" rows={4} />
                 </Form.Item>
               </Col>
             </Row>
           </Form>
         </Card>
-        <Card title="成员管理" bordered={false}>
+        <Card title="贸易信息" bordered={false}>
           {getFieldDecorator('members', {
             initialValue: tableData,
           })(<TradePairsTable title="合同信息" />)}
@@ -231,11 +222,7 @@ class AuditingView extends Component {
             <Col xl={24} lg={24} md={24} sm={24} className={styles.TextCenter}>
               <Form.Item {...specialLayout}>
                 {getFieldDecorator('agreement', {
-                  rules: [
-                    {
-                      validator: this.agreementCheck,
-                    },
-                  ],
+                  valuePropName: 'checked',
                 })(
                   <Checkbox>
                     阅读并同意<a href="">《开具协议》《付款承诺函》</a>
@@ -263,9 +250,9 @@ class AuditingView extends Component {
         </Card>
         <Modal
           visible={visible}
-          title="凭证审核信息确认"
+          title="凭证开立信息确认"
           width={750}
-          onOk={this.ModalhandleOk}
+          onOk={this.handleOk}
           onCancel={this.handleCancel}
           footer={[
             <Button key="back" onClick={this.handleCancel}>
@@ -280,10 +267,22 @@ class AuditingView extends Component {
           <Form {...formItemLayout}>
             <Row>
               <Col xl={24} lg={24} md={24} sm={24}>
-                <Form.Item label="开立方">请输入仓库名称</Form.Item>
+                <Form.Item label="收证方">请输入仓库名称</Form.Item>
               </Col>
               <Col xl={24} lg={24} md={24} sm={24}>
-                <Form.Item label="对账编号">请输入仓库名称</Form.Item>
+                <Form.Item label="开证金额">请输入仓库名称</Form.Item>
+              </Col>
+              <Col xl={24} lg={24} md={24} sm={24}>
+                <Form.Item label="开立日期">请输入仓库名称</Form.Item>
+              </Col>
+              <Col xl={24} lg={24} md={24} sm={24}>
+                <Form.Item label="承诺付款日">请输入仓库名称</Form.Item>
+              </Col>
+              <Col xl={24} lg={24} md={24} sm={24}>
+                <Form.Item label="对账单号">请输入仓库名称</Form.Item>
+              </Col>
+              <Col xl={24} lg={24} md={24} sm={24}>
+                <Form.Item label="经办人">请输入仓库名称</Form.Item>
               </Col>
             </Row>
           </Form>
