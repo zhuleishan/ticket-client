@@ -27,7 +27,7 @@ const customDot = (dot, { status }) =>
   loading: loading.models.rule,
 }))
 @Form.create()
-class AuditingView extends Component {
+class PayableIssuance extends Component {
   state = {
     stepDirection: 'horizontal',
     visible: false,
@@ -311,4 +311,4 @@ class AuditingView extends Component {
   }
 }
 
-export default AuditingView;
+export default PayableIssuance;

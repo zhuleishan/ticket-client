@@ -85,6 +85,12 @@ export default [
             component: './instrumentagents/CopingManagement/PayableIssuance',
           },
           {
+            path: 'batch-import',
+            name: 'BatchImport',
+            hideInMenu: true,
+            component: './instrumentagents/CopingManagement/BatchImport',
+          },
+          {
             path: '/Instrumentagents/credentialsquery',
             name: 'credentialsquery',
             component: './Instrumentagents/CredentialsQuery',
