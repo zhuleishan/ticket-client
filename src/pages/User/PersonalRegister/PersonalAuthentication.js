@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'dva';
-import { formatMessage, FormattedMessage } from 'umi/locale';
 import Link from 'umi/link';
 import router from 'umi/router';
+import { routerRedux } from 'dva/router';
+import { formatMessage, FormattedMessage } from 'umi/locale';
 import { Form, Input, Button, Select, Row, Col, Popover, Progress, Checkbox } from 'antd';
-import styles from './PersonalRegister.less';
+import styles from './index.less';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -39,7 +40,7 @@ const passwordProgressMap = {
   submitting: loading.effects['register/submit'],
 }))
 @Form.create()
-class PersonalRegister extends Component {
+class Account extends React.PureComponent {
   state = {
     count: 0,
     confirmDirty: false,
@@ -94,16 +95,17 @@ class PersonalRegister extends Component {
   handleSubmit = e => {
     e.preventDefault();
     const { form, dispatch } = this.props;
-    form.validateFields({ force: true }, (err, values) => {
+    form.validateFields({ force: true }, err => {
       if (!err) {
-        const { prefix } = this.state;
-        dispatch({
-          type: 'register/submit',
-          payload: {
-            ...values,
-            prefix,
-          },
-        });
+        dispatch(routerRedux.push('/user/personal-register/personal-binding'));
+        // const { prefix } = this.state;
+        // dispatch({
+        //   type: 'register/submit',
+        //   payload: {
+        //     ...values,
+        //     prefix,
+        //   },
+        // });
       }
     });
   };
@@ -137,14 +139,6 @@ class PersonalRegister extends Component {
     }
   };
 
-  agreementCheck = (rule, value, callback) => {
-    if (!value) {
-      callback(formatMessage({ id: 'validation.agreement.required' }));
-    } else {
-      callback();
-    }
-  };
-
   checkPassword = (rule, value, callback) => {
     const { visible, confirmDirty } = this.state;
     if (!value) {
@@ -171,6 +165,14 @@ class PersonalRegister extends Component {
         }
         callback();
       }
+    }
+  };
+
+  agreementCheck = (rule, value, callback) => {
+    if (!value) {
+      callback(formatMessage({ id: 'validation.agreement.required' }));
+    } else {
+      callback();
     }
   };
 
@@ -202,10 +204,7 @@ class PersonalRegister extends Component {
     const { getFieldDecorator } = form;
     const { count, prefix, help, visible, codeState } = this.state;
     return (
-      <div className={styles.main}>
-        <h3>
-          <FormattedMessage id="app.register.enter" />
-        </h3>
+      <Fragment>
         <Form onSubmit={this.handleSubmit}>
           <FormItem>
             {getFieldDecorator('name', {
@@ -364,9 +363,9 @@ class PersonalRegister extends Component {
             </Link>
           </FormItem>
         </Form>
-      </div>
+      </Fragment>
     );
   }
 }
 
-export default PersonalRegister;
+export default Account;

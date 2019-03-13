@@ -7,10 +7,54 @@ export default [
       { path: '/user', redirect: '/user/enterlogin' },
       // 默认企业登录
       { path: '/user/enter-login', name: 'login', component: './User/EnterLogin' },
-      { path: '/user/enter-register', name: 'register', component: './User/EnterRegister' },
+      {
+        path: '/user/enter-register',
+        name: 'register',
+        component: './User/EnterRegister/index',
+        routes: [
+          {
+            path: '/user/enter-register',
+            redirect: '/user/enter-register/enter-account',
+          },
+          {
+            path: '/user/enter-register/enter-account',
+            component: './User/EnterRegister/EnterAccount',
+          },
+          {
+            path: '/user/enter-register/enter-authentication',
+            component: './User/EnterRegister/EnterAuthentication',
+          },
+          {
+            path: '/user/enter-register/enter-binding',
+            component: './User/EnterRegister/EnterBinding',
+          },
+        ],
+      },
       // 个人
       { path: '/user/personal-login', name: 'login', component: './User/PersonalLogin' },
-      { path: '/user/personal-register', name: 'register', component: './User/PersonalRegister' },
+      {
+        path: '/user/personal-register',
+        name: 'register',
+        component: './User/PersonalRegister/index',
+        routes: [
+          {
+            path: '/user/personal-register',
+            redirect: '/user/personal-register/personal-account',
+          },
+          {
+            path: '/user/personal-register/personal-account',
+            component: './User/PersonalRegister/PersonalAccount',
+          },
+          {
+            path: '/user/personal-register/personal-authentication',
+            component: './User/PersonalRegister/PersonalAuthentication',
+          },
+          {
+            path: '/user/personal-register/personal-binding',
+            component: './User/PersonalRegister/PersonalBinding',
+          },
+        ],
+      },
       {
         path: '/user/register-result',
         name: 'register.result',

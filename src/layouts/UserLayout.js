@@ -47,6 +47,32 @@ class UserLayout extends Component {
     });
   }
 
+  getHeaderTitle() {
+    const { location } = this.props;
+    const { pathname } = location;
+    const pathList = pathname.split('/');
+    switch (pathList[pathList.length - 1]) {
+      case 'enter-login':
+        return '企业登录';
+      case 'enter-account':
+        return '企业注册';
+      case 'enter-authentication':
+        return '企业认证';
+      case 'enter-binding':
+        return '账户绑定';
+      case 'personal-login':
+        return '个人登录';
+      case 'personal-account':
+        return '个人注册';
+      case 'personal-authentication':
+        return '个人认证';
+      case 'personal-binding':
+        return '账户绑定';
+      default:
+        return '磁云金服';
+    }
+  }
+
   render() {
     const {
       children,
@@ -64,7 +90,7 @@ class UserLayout extends Component {
               <div className={styles.header}>
                 <Link to="/">
                   <img alt="logo" className={styles.logo} src={logo} />
-                  <span className={styles.title}>磁云金服</span>
+                  <span className={styles.title}>{this.getHeaderTitle()}</span>
                 </Link>
               </div>
               {/* <div className={styles.desc}>Ant Design 是西湖区最具影响力的 Web 设计规范</div> */}
