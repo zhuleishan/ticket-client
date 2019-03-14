@@ -68,6 +68,8 @@ class Account extends React.PureComponent {
   }
 
   onGetCaptcha = () => {
+    // const { form } = this.props;
+    // console.log(form.getFieldValue('mobile'))
     let count = 59;
     this.setState({ count, codeState: true });
     this.interval = setInterval(() => {

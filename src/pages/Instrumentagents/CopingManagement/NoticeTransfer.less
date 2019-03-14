@@ -1,0 +1,148 @@
+@import '~antd/lib/style/themes/default.less';
+@import '~@/utils/utils.less';
+.topBox {
+  :global {
+    .ant-card-body {
+      // padding: 10px;
+      .ant-col-6 {
+        padding: 0 5px;
+        .ant-card-body {
+          text-align: right;
+        }
+        strong {
+          font-size: 22px;
+          text-align: right;
+        }
+        span {
+          margin-left: 10px;
+        }
+      }
+    }
+  }
+}
+.importBox {
+  margin-bottom: 20px;
+  :global {
+    strong {
+      font-size: 20px;
+    }
+    button {
+      margin: 0 5px;
+    }
+  }
+}
+.tableList {
+  .tableListOperator {
+    margin-bottom: 16px;
+    button {
+      margin-right: 8px;
+    }
+  }
+}
+
+.tableListForm {
+  :global {
+    .ant-form-item {
+      display: flex;
+      margin-right: 0;
+      margin-bottom: 24px;
+      > .ant-form-item-label {
+        width: auto;
+        padding-right: 8px;
+        line-height: 32px;
+      }
+      .ant-form-item-control {
+        line-height: 32px;
+      }
+    }
+    .ant-form-item-control-wrapper {
+      flex: 1;
+    }
+  }
+  .submitButtons {
+    display: block;
+    margin-bottom: 24px;
+    white-space: nowrap;
+  }
+}
+
+.headerInfo {
+  position: relative;
+  text-align: center;
+  & > span {
+    display: inline-block;
+    margin-bottom: 4px;
+    color: @text-color-secondary;
+    font-size: @font-size-base;
+    line-height: 22px;
+  }
+  & > p {
+    margin: 0;
+    color: @heading-color;
+    font-size: 24px;
+    line-height: 32px;
+  }
+  & > em {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 1px;
+    height: 56px;
+    background-color: @border-color-split;
+  }
+}
+
+@media screen and (max-width: @screen-sm) {
+  .headerInfo {
+    margin-bottom: 16px;
+    & > em {
+      display: none;
+    }
+  }
+}
+@media screen and (max-width: @screen-lg) {
+  .tableListForm :global(.ant-form-item) {
+    margin-right: 24px;
+  }
+}
+
+@media screen and (max-width: @screen-md) {
+  .tableListForm :global(.ant-form-item) {
+    margin-right: 8px;
+  }
+}
+.standardTable {
+  :global {
+    .ant-table-pagination {
+      margin-top: 24px;
+    }
+  }
+
+  .tableAlert {
+    margin-bottom: 16px;
+  }
+}
+.standardListForm {
+  :global {
+    .ant-form-item {
+      margin-bottom: 12px;
+      &:last-child {
+        margin-bottom: 32px;
+        padding-top: 4px;
+      }
+    }
+  }
+}
+.manualInput {
+  :global {
+    .ant-form-item {
+      margin-bottom: 24px;
+    }
+    .ant-form-item-with-help {
+      margin-bottom: 5px;
+    }
+    .ant-input-number {
+      width: 100%;
+    }
+  }
+}
