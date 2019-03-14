@@ -104,14 +104,28 @@ export async function updateFakeList(params) {
 }
 
 export async function fakeAccountLogin(params) {
-  return request('/capital/login.do', {
+  return request('/cooperateAccount/login.do', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function checkEnterprise(params) {
+  return request('/user/outter/fore/reg/checkEnterprise.do', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function sendCode(params) {
+  return request('/user/outter/fore/reg/sendCode.do', {
     method: 'POST',
     body: params,
   });
 }
 
 export async function fakeRegister(params) {
-  return request('/api/register', {
+  return request('/reg/ticketReg.do', {
     method: 'POST',
     body: params,
   });

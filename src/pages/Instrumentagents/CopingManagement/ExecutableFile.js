@@ -2,19 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import Debounce from 'lodash-decorators/debounce';
 import Bind from 'lodash-decorators/bind';
-import {
-  Button,
-  Card,
-  Steps,
-  Form,
-  // Row,
-  Col,
-  Popover,
-  Row,
-  message,
-  Upload,
-  // Icon
-} from 'antd';
+import { Button, Card, Steps, Form, Col, Popover, Row, Icon, Table } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import 'antd/dist/antd.css';
 import styles from './ExecutableFile.less';
@@ -29,12 +17,16 @@ const customDot = (dot, { status }) =>
   ) : (
     dot
   );
+const getValue = obj =>
+  Object.keys(obj)
+    .map(key => obj[key])
+    .join(',');
 @connect(({ rule, loading }) => ({
   rule,
   loading: loading.models.rule,
 }))
 @Form.create()
-class BatchImport extends Component {
+class ExecutableFile extends Component {
   index = 0;
 
   cacheOriginData = {};
@@ -42,7 +34,8 @@ class BatchImport extends Component {
   // 上传
   state = {
     stepDirection: 'horizontal',
-    fileList: [],
+    formValues: {},
+    visible: false,
   };
 
   // 钩子函数
@@ -76,38 +69,41 @@ class BatchImport extends Component {
     }
   }
 
+  // 分页
+  handlePageChange = (pagination, filtersArg, sorter) => {
+    const { dispatch } = this.props;
+    const { formValues } = this.state;
+
+    const filters = Object.keys(filtersArg).reduce((obj, key) => {
+      const newObj = { ...obj };
+      newObj[key] = getValue(filtersArg[key]);
+      return newObj;
+    }, {});
+
+    const params = {
+      currentPage: pagination.current,
+      pageSize: pagination.pageSize,
+      ...formValues,
+      ...filters,
+    };
+    if (sorter.field) {
+      params.sorter = `${sorter.field}_${sorter.order}`;
+    }
+    dispatch({
+      type: 'rule/fetch',
+      payload: params,
+    });
+  };
+
   render() {
-    const { fileList } = this.state;
-    const props = {
-      name: 'file',
-      action: 'rule/fetch',
-      multiple: false,
-      onChange(info) {
-        if (info.file.status !== 'uploading') {
-          // console.log(info.file, info.fileList);
-        }
-        if (info.file.status === 'done') {
-          message.success(`${info.file.name} file uploaded successfully`);
-        } else if (info.file.status === 'error') {
-          message.error(`${info.file.name} file upload failed.`);
-        }
+    const {
+      rule: {
+        data: { list, pagination },
       },
-      onRemove: file => {
-        this.setState(state => {
-          const index = state.fileList.indexOf(file);
-          const newFileList = state.fileList.slice();
-          newFileList.splice(index, 1);
-          return {
-            fileList: newFileList,
-          };
-        });
-      },
-      beforeUpload: file => {
-        this.setState(state => ({
-          fileList: [...state.fileList, file],
-        }));
-      },
-      fileList,
+      loading,
+    } = this.props;
+    const paginationProps = {
+      ...pagination,
     };
     const specialLayout = {
       wrapperCol: {
@@ -115,36 +111,111 @@ class BatchImport extends Component {
         sm: { span: 24 },
       },
     };
+    const columns = [
+      {
+        title: '凭证编号',
+        dataIndex: 'key',
+        align: 'center',
+      },
+      {
+        title: '凭证类型',
+        dataIndex: 'owner',
+        align: 'center',
+      },
+      {
+        title: '收款方',
+        dataIndex: 'href',
+        align: 'center',
+      },
+      {
+        title: '凭证金额',
+        dataIndex: 'progress',
+        render: val => `${val} 元`,
+        align: 'center',
+      },
+      {
+        title: '凭证日期',
+        dataIndex: 'updatedAt',
+        align: 'center',
+      },
+      {
+        title: '付款日期',
+        dataIndex: 'createdAt',
+        align: 'center',
+      },
+      {
+        title: '应付金额',
+        dataIndex: 'callNo',
+        render: val => `${val} 元`,
+        align: 'center',
+      },
+      {
+        title: '备注',
+        dataIndex: 'desc',
+        align: 'center',
+      },
+      {
+        title: '错误原因',
+        dataIndex: 'status',
+        align: 'center',
+      },
+    ];
     const { stepDirection } = this.state;
 
     // const { title } = this.props;
     return (
       <PageHeaderWrapper>
         <Card title="执行文件" style={{ marginBottom: 24 }} bordered={false}>
-          <Steps direction={stepDirection} progressDot={customDot} current={0}>
+          <Steps direction={stepDirection} progressDot={customDot} current={1}>
             <Step title="上传文件" />
             <Step title="执行文件" />
             <Step title="导入完成" />
           </Steps>
-          <Row className={styles.uploadBox}>
-            <Col span={24}>
-              <div className={styles.imgTb}>
-                <img
-                  src="https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png"
-                  alt=""
+          <Row className={styles.quantity}>
+            <Card bordered>
+              <div style={{ marginRight: 8, float: 'left' }}>
+                <Icon
+                  style={{ color: '#52c41a', marginRight: 8, fontSize: 72 }}
+                  type="check-circle"
+                  theme="filled"
                 />
               </div>
-              <div>
-                <h3>上传填写好的资产数据</h3>
-                <p>请按照数据模板的格式导入数据，模板中的表头不可更改，表头行不能删除</p>
-                <div>
-                  <Button style={{ marginRIght: 20 }}>下载模板</Button>
-                  <Upload {...props} className={styles.upload}>
-                    <Button>文件上传</Button>
-                  </Upload>
-                </div>
+              <div style={{ float: 'left' }}>
+                <h2>本次可导入数量</h2>
+                <span>30条</span>
               </div>
-            </Col>
+            </Card>
+            <Card bordered>
+              <div style={{ marginRight: 8, float: 'left' }}>
+                <Icon
+                  style={{ color: '#f5222d', marginRight: 8, fontSize: 72 }}
+                  type="close-circle"
+                  theme="filled"
+                />
+              </div>
+              <div style={{ float: 'left' }}>
+                <h2>本次不可导入数量</h2>
+                <span>30条</span>
+              </div>
+            </Card>
+          </Row>
+          <Row>
+            <div className={styles.standardTable}>
+              <Table
+                {...this.state}
+                dataSource={list}
+                loading={loading}
+                columns={columns}
+                pagination={{
+                  current: paginationProps.current,
+                  pageSize: paginationProps.pageSize,
+                  total: paginationProps.total,
+                  showQuickJumper: true,
+                  showSizeChanger: true,
+                }}
+                onChange={this.handlePageChange}
+              />
+            </div>
           </Row>
           <Row>
             <Col xl={24} lg={24} md={24} sm={24} className={styles.TextCenter}>
@@ -164,4 +235,4 @@ class BatchImport extends Component {
   }
 }
 
-export default BatchImport;
+export default ExecutableFile;
