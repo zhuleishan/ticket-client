@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import { connect } from 'dva';
 import Link from 'umi/link';
 import router from 'umi/router';
-import { routerRedux } from 'dva/router';
+// import { routerRedux } from 'dva/router';
 import { formatMessage, FormattedMessage } from 'umi/locale';
 import { Form, Input, Button, Select, Row, Col, Popover, Progress, Checkbox } from 'antd';
 import styles from './index.less';
@@ -68,6 +68,16 @@ class Account extends React.PureComponent {
   }
 
   onGetCaptcha = () => {
+    const { form, dispatch } = this.props;
+    const phone = form.getFieldValue('adminMobile');
+    const { prefix } = this.state;
+    dispatch({
+      type: 'register/sendCode',
+      payload: {
+        prefix,
+        phone,
+      },
+    });
     let count = 59;
     this.setState({ count, codeState: true });
     this.interval = setInterval(() => {
@@ -92,20 +102,17 @@ class Account extends React.PureComponent {
     return 'poor';
   };
 
-  handleSubmit = e => {
-    e.preventDefault();
+  handleSubmit = () => {
     const { form, dispatch } = this.props;
-    form.validateFields({ force: true }, err => {
+    form.validateFields({ force: true }, (err, values) => {
       if (!err) {
-        dispatch(routerRedux.push('/user/enter-register/enter-authentication'));
-        // const { prefix } = this.state;
-        // dispatch({
-        //   type: 'register/submit',
-        //   payload: {
-        //     ...values,
-        //     prefix,
-        //   },
-        // });
+        dispatch({
+          type: 'register/submit',
+          payload: {
+            ...values,
+          },
+        });
+        // dispatch(routerRedux.push('/user/enter-register/enter-authentication'));
       }
     });
   };
@@ -207,7 +214,7 @@ class Account extends React.PureComponent {
       <Fragment>
         <Form onSubmit={this.handleSubmit}>
           <FormItem>
-            {getFieldDecorator('name', {
+            {getFieldDecorator('enterpriseName', {
               rules: [
                 {
                   required: true,
@@ -217,7 +224,7 @@ class Account extends React.PureComponent {
             })(<Input size="large" placeholder={formatMessage({ id: 'form.name.placeholder' })} />)}
           </FormItem>
           <FormItem>
-            {getFieldDecorator('mail', {
+            {getFieldDecorator('email', {
               rules: [
                 {
                   type: 'email',
@@ -289,7 +296,7 @@ class Account extends React.PureComponent {
                 <Option value="86">+86</Option>
                 <Option value="87">+87</Option>
               </Select>
-              {getFieldDecorator('mobile', {
+              {getFieldDecorator('adminMobile', {
                 rules: [
                   {
                     validator: this.mobile,
@@ -307,7 +314,7 @@ class Account extends React.PureComponent {
           <FormItem>
             <Row gutter={8}>
               <Col span={16}>
-                {getFieldDecorator('captcha', {
+                {getFieldDecorator('code', {
                   rules: [
                     {
                       required: true,
@@ -336,7 +343,7 @@ class Account extends React.PureComponent {
             </Row>
           </FormItem>
           <FormItem>
-            {getFieldDecorator('agreement', {
+            {getFieldDecorator('agree', {
               rules: [
                 {
                   validator: this.agreementCheck,

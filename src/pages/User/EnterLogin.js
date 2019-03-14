@@ -30,14 +30,14 @@ class EnterLogin extends Component {
 
   onGetCaptcha = () =>
     new Promise((resolve, reject) => {
-      this.loginForm.validateFields(['mobile'], {}, (err, values) => {
+      this.loginForm.validateFields(['adminMobile'], {}, (err, values) => {
         if (err) {
           reject(err);
         } else {
           const { dispatch } = this.props;
           dispatch({
-            type: 'login/getCaptcha',
-            payload: values.mobile,
+            type: '/user/outter/fore/reg/sendCode.do',
+            payload: values.adminMobile,
           })
             .then(resolve)
             .catch(reject);
