@@ -55,4 +55,5 @@ export default {
   'menu.instrumentagents.credentialsquery.index': '凭证查询',
   'menu.instrumentagents.credentialsquery.payand': '凭证支付',
   'menu.instrumentagents.credentialsquery.designs': '凭证支付',
+  'menu.instrumentagents.NoticeTransfer': '转让通知',
 };

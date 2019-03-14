@@ -4,9 +4,16 @@ export default [
     path: '/user',
     component: '../layouts/UserLayout',
     routes: [
-      { path: '/user', redirect: '/user/enterlogin' },
+      {
+        path: '/user',
+        redirect: '/user/enterlogin',
+      },
       // 默认企业登录
-      { path: '/user/enter-login', name: 'login', component: './User/EnterLogin' },
+      {
+        path: '/user/enter-login',
+        name: 'login',
+        component: './User/EnterLogin',
+      },
       {
         path: '/user/enter-register',
         name: 'register',
@@ -31,7 +38,11 @@ export default [
         ],
       },
       // 个人
-      { path: '/user/personal-login', name: 'login', component: './User/PersonalLogin' },
+      {
+        path: '/user/personal-login',
+        name: 'login',
+        component: './User/PersonalLogin',
+      },
       {
         path: '/user/personal-register',
         name: 'register',
@@ -69,7 +80,10 @@ export default [
     Routes: ['src/pages/Authorized'],
     routes: [
       // dashboard
-      { path: '/', redirect: '/dashboard/analysis' },
+      {
+        path: '/',
+        redirect: '/dashboard/analysis',
+      },
       {
         path: '/dashboard',
         name: 'dashboard',
@@ -139,6 +153,11 @@ export default [
             name: 'ExecutableFile',
             hideInMenu: true,
             component: './instrumentagents/CopingManagement/ExecutableFile',
+          },
+          {
+            path: 'notice-transfer',
+            name: 'NoticeTransfer',
+            component: './instrumentagents/CopingManagement/NoticeTransfer',
           },
           {
             path: '/Instrumentagents/credentialsquery',
@@ -315,7 +334,11 @@ export default [
             name: 'success',
             component: './Result/Success',
           },
-          { path: '/result/fail', name: 'fail', component: './Result/Error' },
+          {
+            path: '/result/fail',
+            name: 'fail',
+            component: './Result/Error',
+          },
         ],
       },
       {
