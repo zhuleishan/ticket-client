@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import { connect } from 'dva';
+import { Link } from 'dva/router';
 import numeral from 'numeral';
 import {
   Form,
@@ -98,9 +99,16 @@ class Step1 extends React.PureComponent {
                 }
                 extra={
                   <Col>
-                    <Button type="primary" style={{ marginRight: '10px' }}>
-                      融资
-                    </Button>
+                    <Link to="/Instrumentagents/credentialsquery/designs">
+                      <Button type="primary" style={{ marginRight: '10px' }}>
+                        签收
+                      </Button>
+                    </Link>
+                    <Link to="/Instrumentagents/credentialsquery/payand">
+                      <Button type="primary" style={{ marginRight: '10px' }}>
+                        融资
+                      </Button>
+                    </Link>
                     <Button type="primary">转让</Button>
                   </Col>
                 }
