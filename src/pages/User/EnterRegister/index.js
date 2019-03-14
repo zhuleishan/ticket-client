@@ -43,9 +43,17 @@ export default class StepForm extends PureComponent {
   render() {
     const { children } = this.props;
     const { list } = this.state;
+
     return (
       <div>
         <div className={styles.main}>{children}</div>
+        {/* <Form layout='horizontal' {...formItemLayout}>
+          <Row style={{ paddingLeft: 24, paddingRight: 24 }}>
+            <Col xl={24} lg={24} md={24} sm={24}>
+              <div className={styles.main}>{children}</div>
+            </Col>
+          </Row>
+        </Form> */}
         <Divider />
         <Row style={{ paddingLeft: 24, paddingRight: 24 }}>
           <Col xl={24} lg={24} md={24} sm={24}>
