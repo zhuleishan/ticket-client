@@ -152,7 +152,7 @@ const CreateForm = Form.create()(props => {
   loading: loading.models.rule,
 }))
 @Form.create()
-class CopingList extends PureComponent {
+class NoticeTransfer extends PureComponent {
   state = {
     expandForm: false,
     formValues: {},
@@ -507,4 +507,4 @@ class CopingList extends PureComponent {
     );
   }
 }
-export default CopingList;
+export default NoticeTransfer;
