@@ -205,7 +205,7 @@ class Account extends React.PureComponent {
     const { count, prefix, help, visible, codeState } = this.state;
     return (
       <Fragment>
-        <Form onSubmit={this.handleSubmit}>
+        <Form onSubmit={this.handleSubmit} className={styles.account}>
           <FormItem>
             {getFieldDecorator('name', {
               rules: [

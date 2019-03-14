@@ -1,13 +1,40 @@
 @import '~antd/lib/style/themes/default.less';
+@import '~@/utils/utils.less';
+
+.Nafter {
+  :global {
+    .ant-form-item-label label::after {
+      content: '' !important;
+    }
+  }
+}
+
+.title {
+  :global {
+    .ant-form-item-label label::after {
+      content: '' !important;
+    }
+    .ant-form-item-label label {
+      color: rgba(0, 0, 255, 0.847058823529412);
+      font-size: 18px;
+    }
+    .ant-form-item-control {
+      margin-left: 10px;
+    }
+  }
+}
 
 .main {
-  width: 388px;
   margin: 20px auto;
-
   :global {
     .ant-form-item {
       margin-bottom: 18px;
     }
+  }
+
+  .account {
+    width: 450px;
+    margin: 0 auto;
   }
 
   h3 {
