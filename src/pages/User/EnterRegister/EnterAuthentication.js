@@ -1,39 +1,13 @@
 import React, { Fragment } from 'react';
 import { connect } from 'dva';
-import Link from 'umi/link';
 import router from 'umi/router';
-import { routerRedux } from 'dva/router';
-import { formatMessage, FormattedMessage } from 'umi/locale';
-import { Form, Input, Button, Select, Row, Col, Popover, Progress } from 'antd';
+// import { routerRedux } from 'dva/router';
+import { Form, Input, Button, Select, Row, Radio, DatePicker, Upload, Icon, message } from 'antd';
 import styles from './index.less';
 
+const dateFormat = 'YYYY/MM/DD';
 const FormItem = Form.Item;
 const { Option } = Select;
-const InputGroup = Input.Group;
-
-const passwordStatusMap = {
-  ok: (
-    <div className={styles.success}>
-      <FormattedMessage id="validation.password.strength.strong" />
-    </div>
-  ),
-  pass: (
-    <div className={styles.warning}>
-      <FormattedMessage id="validation.password.strength.medium" />
-    </div>
-  ),
-  poor: (
-    <div className={styles.error}>
-      <FormattedMessage id="validation.password.strength.short" />
-    </div>
-  ),
-};
-
-const passwordProgressMap = {
-  ok: 'success',
-  pass: 'normal',
-  poor: 'exception',
-};
 
 @connect(({ register, loading }) => ({
   register,
@@ -42,12 +16,7 @@ const passwordProgressMap = {
 @Form.create()
 class Account extends React.PureComponent {
   state = {
-    count: 0,
-    confirmDirty: false,
-    visible: false,
-    help: '',
-    prefix: '86',
-    codeState: true,
+    loading: false,
   };
 
   componentDidUpdate() {
@@ -63,41 +32,39 @@ class Account extends React.PureComponent {
     }
   }
 
-  componentWillUnmount() {
-    clearInterval(this.interval);
-  }
-
-  onGetCaptcha = () => {
-    let count = 59;
-    this.setState({ count, codeState: true });
-    this.interval = setInterval(() => {
-      count -= 1;
-      this.setState({ count });
-      if (count === 0) {
-        clearInterval(this.interval);
-        this.setState({ codeState: false });
-      }
-    }, 1000);
+  getBase64 = (img, callback) => {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => callback(reader.result));
+    reader.readAsDataURL(img);
   };
 
-  getPasswordStatus = () => {
-    const { form } = this.props;
-    const value = form.getFieldValue('password');
-    if (value && value.length > 9) {
-      return 'ok';
+  beforeUpload = file => {
+    const isJPG = file.type === 'image/jpeg';
+    if (!isJPG) {
+      message.error('You can only upload JPG file!');
     }
-    if (value && value.length > 5) {
-      return 'pass';
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      message.error('Image must smaller than 2MB!');
     }
-    return 'poor';
+    return isJPG && isLt2M;
+  };
+
+  handleChange = info => {
+    console.log(info);
   };
 
   handleSubmit = e => {
     e.preventDefault();
     const { form, dispatch } = this.props;
-    form.validateFields({ force: true }, err => {
+    form.validateFields({ force: true }, (err, fieldsValue) => {
       if (!err) {
-        dispatch(routerRedux.push('/user/enter-register/enter-binding'));
+        const values = {
+          ...fieldsValue,
+          data: fieldsValue.data ? fieldsValue.data.format('YYYY-MM-DD') : undefined,
+        };
+        console.log(values, dispatch);
+        // dispatch(routerRedux.push('/user/enter-register/enter-binding'));
         // const { prefix } = this.state;
         // dispatch({
         //   type: 'register/submit',
@@ -110,91 +77,11 @@ class Account extends React.PureComponent {
     });
   };
 
-  handleConfirmBlur = e => {
-    const { value } = e.target;
-    const { confirmDirty } = this.state;
-    this.setState({ confirmDirty: confirmDirty || !!value });
-  };
-
-  checkConfirm = (rule, value, callback) => {
-    const { form } = this.props;
-    if (value && value !== form.getFieldValue('password')) {
-      callback(formatMessage({ id: 'validation.password.twice' }));
-    } else {
-      callback();
-    }
-  };
-
-  mobile = (rule, value, callback) => {
-    const mobileTest = /^\d{11}$/;
-    if (!value) {
-      callback(formatMessage({ id: 'validation.phone-number.required' }));
-    } else if (!mobileTest.test(value)) {
-      callback(formatMessage({ id: 'validation.phone-number.wrong-format' }));
-    } else {
-      this.setState({
-        codeState: false,
-      });
-      callback();
-    }
-  };
-
-  checkPassword = (rule, value, callback) => {
-    const { visible, confirmDirty } = this.state;
-    if (!value) {
-      this.setState({
-        help: formatMessage({ id: 'validation.password.required' }),
-        visible: !!value,
-      });
-      callback('error');
-    } else {
-      this.setState({
-        help: '',
-      });
-      if (!visible) {
-        this.setState({
-          visible: !!value,
-        });
-      }
-      if (value.length < 6) {
-        callback('error');
-      } else {
-        const { form } = this.props;
-        if (value && confirmDirty) {
-          form.validateFields(['confirm'], { force: true });
-        }
-        callback();
-      }
-    }
-  };
-
-  changePrefix = value => {
-    this.setState({
-      prefix: value,
-    });
-  };
-
-  renderPasswordProgress = () => {
-    const { form } = this.props;
-    const value = form.getFieldValue('password');
-    const passwordStatus = this.getPasswordStatus();
-    return value && value.length ? (
-      <div className={styles[`progress-${passwordStatus}`]}>
-        <Progress
-          status={passwordProgressMap[passwordStatus]}
-          className={styles.progress}
-          strokeWidth={6}
-          percent={value.length * 10 > 100 ? 100 : value.length * 10}
-          showInfo={false}
-        />
-      </div>
-    ) : null;
-  };
-
   render() {
-    const { form, submitting } = this.props;
-    const { getFieldDecorator } = form;
-    const { count, prefix, help, visible, codeState } = this.state;
+    const {
+      submitting,
+      form: { getFieldDecorator, getFieldValue },
+    } = this.props;
     const formItemLayout = {
       labelCol: {
         xl: { span: 9 },
@@ -209,6 +96,13 @@ class Account extends React.PureComponent {
         sm: { span: 20 },
       },
     };
+    const { imageUrl, loading } = this.state;
+    const uploadButton = (
+      <div>
+        <Icon type={loading ? 'loading' : 'plus'} />
+        <div className="ant-upload-text">上传</div>
+      </div>
+    );
     return (
       <Fragment>
         <Form onSubmit={this.handleSubmit} layout="horizontal" {...formItemLayout}>
@@ -221,127 +115,140 @@ class Account extends React.PureComponent {
                 rules: [
                   {
                     required: true,
-                    message: formatMessage({ id: 'validation.name.required' }),
+                    message: '请输入企业名称！',
                   },
                 ],
-              })(<Input size="large" placeholder="请输入企业名称" />)}
+              })(<Input placeholder="请输入企业名称" />)}
+            </FormItem>
+            <FormItem label="企业类型">
+              {getFieldDecorator('enterType', {
+                rules: [
+                  {
+                    required: true,
+                    message: '请选择企业类型！',
+                  },
+                ],
+              })(
+                <Select placeholder="请选择企业类型">
+                  <Option value="1">国有企业</Option>
+                  <Option value="2">私有企业</Option>
+                </Select>
+              )}
+            </FormItem>
+            <FormItem label="是否上市">
+              <div>
+                {getFieldDecorator('public', {
+                  rules: [
+                    {
+                      required: true,
+                      message: '请选择是否上市！',
+                    },
+                  ],
+                })(
+                  <Radio.Group>
+                    <Radio value="1">是</Radio>
+                    <Radio value="2">否</Radio>
+                  </Radio.Group>
+                )}
+                {getFieldValue('public') === '1' ? (
+                  <FormItem>
+                    {getFieldDecorator('exchange', {
+                      rules: [
+                        {
+                          required: true,
+                          message: '请选择交易所！',
+                        },
+                      ],
+                    })(
+                      <Select placeholder="请选择交易所">
+                        <Option value="1">1</Option>
+                        <Option value="2">2</Option>
+                        <Option value="3">3</Option>
+                      </Select>
+                    )}
+                  </FormItem>
+                ) : null}
+                {getFieldValue('public') === '1' ? (
+                  <FormItem style={{ marginBottom: 0 }}>
+                    {getFieldDecorator('shares', {
+                      rules: [
+                        {
+                          required: true,
+                          message: '请输入股票代码！',
+                        },
+                      ],
+                    })(<Input placeholder="请输入股票代码" />)}
+                  </FormItem>
+                ) : null}
+              </div>
+            </FormItem>
+            <FormItem label="统一社会信用代码">
+              {getFieldDecorator('mail', {
+                rules: [
+                  {
+                    required: true,
+                    message: '请输入统一社会信用代码！',
+                  },
+                ],
+              })(<Input placeholder="请输入统一社会信用代码" />)}
+            </FormItem>
+            <FormItem label="成立时间">
+              {getFieldDecorator('data', {
+                rules: [
+                  {
+                    required: true,
+                    message: '请选择成立时间！',
+                  },
+                ],
+              })(
+                <DatePicker
+                  style={{ width: '100%' }}
+                  placeholder="请选择成立时间"
+                  format={dateFormat}
+                />
+              )}
+            </FormItem>
+            <FormItem label="公司地址">
+              {getFieldDecorator('sili', {
+                rules: [
+                  {
+                    required: true,
+                    message: '请输入公司地址！',
+                  },
+                ],
+              })(<Input placeholder="请输入公司地址" />)}
             </FormItem>
             <FormItem label="企业邮箱">
               {getFieldDecorator('mail', {
                 rules: [
                   {
                     type: 'email',
-                    message: formatMessage({ id: 'validation.email.wrong-format' }),
+                    message: '请输入企业邮箱！',
                   },
                 ],
-              })(<Input size="large" placeholder="请输入企业邮箱" />)}
+              })(<Input placeholder="请输入企业邮箱" />)}
             </FormItem>
-            <FormItem help={help} label="企业名称">
-              <Popover
-                getPopupContainer={node => node.parentNode}
-                content={
-                  <div style={{ padding: '4px 0' }}>
-                    {passwordStatusMap[this.getPasswordStatus()]}
-                    {this.renderPasswordProgress()}
-                    <div style={{ marginTop: 10 }}>
-                      <FormattedMessage id="validation.password.strength.msg" />
-                    </div>
-                  </div>
-                }
-                overlayStyle={{ width: 240 }}
-                placement="right"
-                visible={visible}
-              >
-                {getFieldDecorator('password', {
-                  rules: [
-                    {
-                      validator: this.checkPassword,
-                    },
-                  ],
-                })(
-                  <Input
-                    size="large"
-                    type="password"
-                    placeholder={formatMessage({ id: 'form.password.placeholder' })}
-                  />
-                )}
-              </Popover>
-            </FormItem>
-            <FormItem label="企业名称">
-              {getFieldDecorator('confirm', {
+            <FormItem label="企业邮箱">
+              {getFieldDecorator('img', {
                 rules: [
                   {
                     required: true,
-                    message: formatMessage({ id: 'validation.confirm-password.required' }),
-                  },
-                  {
-                    validator: this.checkConfirm,
+                    message: '请输入企业邮箱！',
                   },
                 ],
               })(
-                <Input
-                  size="large"
-                  type="password"
-                  placeholder={formatMessage({ id: 'form.confirm-password.placeholder' })}
-                />
-              )}
-            </FormItem>
-            <FormItem label="企业名称">
-              <InputGroup compact>
-                <Select
-                  size="large"
-                  value={prefix}
-                  onChange={this.changePrefix}
-                  style={{ width: '20%' }}
+                <Upload
+                  name="avatar"
+                  listType="picture-card"
+                  className={styles.uploader}
+                  showUploadList={false}
+                  action="//jsonplaceholder.typicode.com/posts/"
+                  beforeUpload={this.beforeUpload}
+                  onChange={this.handleChange}
                 >
-                  <Option value="86">+86</Option>
-                  <Option value="87">+87</Option>
-                </Select>
-                {getFieldDecorator('mobile', {
-                  rules: [
-                    {
-                      validator: this.mobile,
-                    },
-                  ],
-                })(
-                  <Input
-                    size="large"
-                    style={{ width: '80%' }}
-                    placeholder={formatMessage({ id: 'form.phone-number.placeholder' })}
-                  />
-                )}
-              </InputGroup>
-            </FormItem>
-            <FormItem label="企业名称">
-              <Row gutter={8}>
-                <Col span={16}>
-                  {getFieldDecorator('captcha', {
-                    rules: [
-                      {
-                        required: true,
-                        message: formatMessage({ id: 'validation.verification-code.required' }),
-                      },
-                    ],
-                  })(
-                    <Input
-                      size="large"
-                      placeholder={formatMessage({ id: 'form.verification-code.placeholder' })}
-                    />
-                  )}
-                </Col>
-                <Col span={8}>
-                  <Button
-                    size="large"
-                    disabled={codeState}
-                    className={styles.getCaptcha}
-                    onClick={this.onGetCaptcha}
-                  >
-                    {count
-                      ? `${count} s`
-                      : formatMessage({ id: 'app.register.get-verification-code' })}
-                  </Button>
-                </Col>
-              </Row>
+                  {imageUrl ? <img src={imageUrl} alt="avatar" /> : uploadButton}
+                </Upload>
+              )}
             </FormItem>
             <FormItem label=" " className={styles.Nafter}>
               <Button
@@ -351,11 +258,8 @@ class Account extends React.PureComponent {
                 type="primary"
                 htmlType="submit"
               >
-                <FormattedMessage id="app.register.register" />
+                提交
               </Button>
-              <Link className={styles.login} to="/User/Login">
-                <FormattedMessage id="app.register.sign-in" />
-              </Link>
             </FormItem>
           </Row>
         </Form>
